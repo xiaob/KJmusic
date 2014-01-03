@@ -1,6 +1,5 @@
 package net.kymjs.music.ui;
 
-import net.kymjs.music.AppContext;
 import net.kymjs.music.AppManager;
 import net.kymjs.music.Config;
 import net.kymjs.music.R;
@@ -20,12 +19,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -52,12 +54,49 @@ public class Main extends BaseActivity {
     private ImageView mImg;
     private TextView mTvTitle, mTvArtist;
 
+    // 歌词界面需要的变量
+    public boolean isOpen = false;// lyric当前是否为显示
+    private int screenHeight = 0;// lyric显示的高度
+    private FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
+    private View lyricView;
+
     @Override
     public void initWidget() {
-        setContentView(R.layout.main);
+        setContentView(R.layout.main_activity);
         setUpMenu();
-        changeFragment(new MainFragment());
+        changeFragment(new MainFragment(), false);
+        changeFragment(R.id.main_layout_lyric, new LyricFragment(), false);
         initBottonBar();
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // 处理歌词界面
+        WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        screenHeight = window.getDefaultDisplay().getHeight();
+        int width = window.getDefaultDisplay().getWidth();
+        contentParams = new FrameLayout.LayoutParams(width, screenHeight);
+        lyricView = findViewById(R.id.main_aty_lyric);
+        contentParams.topMargin = screenHeight;
+        lyricView.setLayoutParams(contentParams);
+
+        Intent serviceIntent = new Intent(this, PlayerService.class);
+        this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.RECEIVER_MUSIC_CHANGE);
+        registerReceiver(changeReceiver, filter);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        refreshBottomBar();
     }
 
     /**
@@ -140,7 +179,8 @@ public class Main extends BaseActivity {
         Player player = Player.getPlayer();
         switch (v.getId()) {
         case R.id.bottom_bar:
-            changeFragment(new LyricFragment());
+            // changeFragment(new LyricFragment(), false);
+            wantScroll(this);
             break;
         case R.id.bottom_btn_next:
             mPlayersService.next();
@@ -181,17 +221,33 @@ public class Main extends BaseActivity {
         }
     }
 
-    private void changeFragment(Fragment targetFragment) {
+    /**
+     * 改变界面的fragment
+     */
+    private void changeFragment(Fragment targetFragment, boolean pushStack) {
+        changeFragment(R.id.main_fragment, targetFragment, pushStack);
+    }
+
+    /**
+     * 改变界面的fragment
+     */
+    private void changeFragment(int resView, Fragment targetFragment,
+            boolean pushStack) {
         resideMenu.clearIgnoredViewList();// 清空不拦截触摸事件的控件（界面已经被替换）
-        getFragmentManager().beginTransaction()
+        FragmentTransaction transaction = getFragmentManager()
+                .beginTransaction();
         // 使用传入的fragment替换主界面的fragment
-                .replace(R.id.main_fragment, targetFragment, "fragment")
-                // 设置动画样式
-                .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE)
-                // 添加到返回栈（使用户按下返回键时可以返回上一个界面）
-                // .addToBackStack(null)
-                // 提交
-                .commit();
+        transaction.replace(resView, targetFragment, "fragment");
+        // 设置动画样式
+        transaction
+                .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+        if (pushStack) {
+            // 添加到返回栈（使用户按下返回键时可以返回上一个界面）
+            transaction.addToBackStack(null);
+        }
+        // 提交
+        transaction.commit();
     }
 
     @Override
@@ -202,27 +258,6 @@ public class Main extends BaseActivity {
 
     public ResideMenu getResideMenu() {
         return resideMenu;
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        Intent serviceIntent = new Intent(this, PlayerService.class);
-        this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(Config.RECEIVER_MUSIC_CHANGE);
-        registerReceiver(changeReceiver, filter);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        refreshBottomBar();
     }
 
     @Override
@@ -251,9 +286,6 @@ public class Main extends BaseActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             mPlayersService = ((PlayerService.LocalPlayer) service)
                     .getService();
-            if (mPlayersService != null) {
-                ((AppContext) getApplication()).mPlayersService = mPlayersService;
-            }
         }
     }
 
@@ -266,6 +298,78 @@ public class Main extends BaseActivity {
             if (Player.getPlayer().getPlaying() != Config.PLAYING_STOP) {
                 refreshBottomBar();
             }
+        }
+    }
+
+    /************************************************************************************
+     * 
+     * 抽屉效果策略
+     * 
+     ************************************************************************************/
+    public void wantScroll(Main aty) {
+        if (isOpen) {
+            aty.scrollToLrc();
+        } else {
+            aty.scrollToContent();
+        }
+    }
+
+    public void scrollToLrc() {
+        new ScrollTask().execute(15);
+        isOpen = false;
+    }
+
+    public void scrollToContent() {
+        new ScrollTask().execute(-15);
+        isOpen = true;
+    }
+
+    public void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class ScrollTask extends AsyncTask<Integer, Integer, Integer> {
+        @Override
+        protected Integer doInBackground(Integer... speed) {
+            int topMargin = contentParams.topMargin;
+            // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
+            while (true) {
+                topMargin += speed[0];
+                if (topMargin > screenHeight - 61) {
+                    sleep(30);
+                    if (topMargin > screenHeight) {
+                        topMargin = screenHeight;
+                        break;
+                    }
+                } else if (topMargin < 61) {
+                    sleep(30);
+                    if (topMargin < 0) {
+                        topMargin = 0;
+                        break;
+                    }
+                }
+                publishProgress(topMargin);
+                // 每次循环使线程睡眠，这样肉眼才能够看到滚动动画。
+                sleep(10);
+            }
+            return topMargin;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... left) {
+            contentParams.topMargin = left[0];
+            lyricView.setLayoutParams(contentParams);
+            lyricView.invalidate();
+        }
+
+        @Override
+        protected void onPostExecute(Integer left) {
+            contentParams.topMargin = left;
+            lyricView.setLayoutParams(contentParams);
         }
     }
 }

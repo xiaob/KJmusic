@@ -2,23 +2,13 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lrc_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_img_menuback_cool" >
 
     <ImageView
         android:id="@+id/lrc_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <RadioGroup
-        android:id="@+id/lrc_circle_layout"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="15dp"
-        android:background="#00000000"
-        android:gravity="center"
-        android:orientation="horizontal" >
-    </RadioGroup>
 
     <net.kymjs.music.ui.widget.TabLayout
         android:id="@+id/lrc_tablayout"
@@ -32,5 +22,16 @@
 
         <include layout="@layout/frag_lyric_lrc" />
     </net.kymjs.music.ui.widget.TabLayout>
+
+    <RadioGroup
+        android:id="@+id/lrc_circle_layout"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="15dp"
+        android:background="#00000000"
+        android:gravity="center"
+        android:orientation="horizontal" >
+    </RadioGroup>
 
 </FrameLayout>

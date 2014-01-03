@@ -5,10 +5,13 @@ import net.kymjs.music.adapter.LrcListAdapter;
 import net.kymjs.music.ui.Main;
 import net.kymjs.music.ui.widget.TabLayout;
 import net.kymjs.music.ui.widget.TabLayout.OnViewChangeListener;
+import net.kymjs.music.utils.Player;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -31,6 +34,14 @@ public class LyricFragment extends BaseFragment {
         ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
         mPlayList = (ListView) parentView.findViewById(R.id.lrc_pager_list);
         mPlayList.setAdapter(new LrcListAdapter(getActivity()));
+        mPlayList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                ((Main) getActivity()).mPlayersService.play(Player.getPlayer()
+                        .getList(), position);
+            }
+        });
     }
 
     /**

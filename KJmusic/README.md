@@ -61,7 +61,7 @@ GPLV2协议说明：GPL协议的主要内容是只要在一个软件中使用(�
 	
 ## **二、项目的功能流程** ##
 #### 1、APP启动流程 ####
-	应用首次启动，将跳转至net.kymjs.music(以下称主包)下的AppStart，在载入动画和资源的同时判断是否为首次安装程序，之后跳转到相应的Activity（欢迎界面Welcome或主界面Main）。<br>
+	应用首次启动，将跳转至net.kymjs.music包下的AppStart，在载入动画和资源的同时判断是否为首次安装程序，之后跳转到相应的Activity（欢迎界面Welcome或主界面Main）。<br>
 
 #### 2、APP访问API流程 ####
 	**1) 初始化控件**<br>

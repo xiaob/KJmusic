@@ -52,7 +52,7 @@ public class CollectListAdapter extends AbsPlayListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        int px = DensityUtils.dip2px(context, 10);
+        int px = DensityUtils.dip2px(context, 14);
         ViewHolder holder;
         if (convertView == null) {
             convertView = View.inflate(context, R.layout.list_item_music, null);
