@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">KJ音乐</string>
+    <string name="action_settings">Settings</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="local_music">本地音乐</string>
+    <string name="my_collect">我的收藏</string>
+    <string name="net_music">网络音乐</string>
+
+</resources>
