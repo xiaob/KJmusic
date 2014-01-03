@@ -92,7 +92,6 @@ public class MainFragment extends BaseFragment {
 
     /**
      * 初始化主界面ViewPager
-     * 
      */
     private void initViewPager(View parentView) {
         jsViewPager = (JSViewPager) parentView.findViewById(R.id.main_pager);
