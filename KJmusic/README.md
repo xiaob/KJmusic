@@ -10,16 +10,17 @@ KJmusic
 
 > target=android-17
 
-********本项目采用 GPL 授权协议:
-你拥有的权利:
-    以任何目的运行此程序的自由;
-    再发行复制件的自由;
-    改进此程序，并公开发布改进的自由.
-你需要注意:
-                如果在发布源于GPL的软件的时候，同时添加强制的条款，以在一定程度上保障其它一些人的权益，那么将无权发布该软件。
-********欢迎大家在这个基础上进行改进，并与大家分享。
+********本项目采用 GPL v2授权协议:
+GPLV2协议说明：GPL协议的主要内容是只要在一个软件中使用(“使用”指类库引用，修改后的代码或者衍生代码)GPL 协议的产品，则该软件产品必须也采用GPL协议，既必须也是开源和免费。这就是所谓的”传染性”。GPL协议的产品作为一个单独的产品使用没有任何问题，还可以享受免费的优势。<br>
+你拥有的权利:<br>
+    以任何目的运行此程序的自由;<br>
+    再发行复制件的自由;<br>
+    改进此程序，并公开发布改进的自由.<br>
+你需要注意:<br>
+                如果在发布源于GPL的软件的时候，同时添加强制的条款，以在一定程度上保障其它一些人的权益，那么将无权发布该软件。<br>
+********欢迎大家在这个基础上进行改进，并与大家分享。<br>
 
-下面将简单的解析下项目：
+下面将简单的解析下项目：<br>
 
 ## **一、项目的目录结构** ##
 > 根目录<br>
@@ -31,19 +32,19 @@ KJmusic
 > ├ proguard.cfg<br>
 > └ project.properties<br>
 
-下面是src目录的子目录（未来可能变更）：
-	> src
-	> ├ net.kymjs.music
-	> ├ net.kymjs.music.ui
-	> ├ net.kymjs.music.ui.fragment
-	> ├ net.kymjs.music.ui.widget
-	> ├ net.kymjs.music.adapter
-	> ├ net.kymjs.music.utils
-	> ├ net.kymjs.music.bean
-	> ├ net.kymjs.music.service
-	> ├ net.kymjs.music.db
-	> └ net.kymjs.music.resolve
-	> └ net.kymjs.music.receiver
+下面是src目录的子目录（未来可能变更）：<br>
+	> src<br>
+	> ├ net.kymjs.music<br>
+	> ├ net.kymjs.music.ui<br>
+	> ├ net.kymjs.music.ui.fragment<br>
+	> ├ net.kymjs.music.ui.widget<br>
+	> ├ net.kymjs.music.adapter<br>
+	> ├ net.kymjs.music.utils<br>
+	> ├ net.kymjs.music.bean<br>
+	> ├ net.kymjs.music.service<br>
+	> ├ net.kymjs.music.db<br>
+	> └ net.kymjs.music.resolve<br>
+	> └ net.kymjs.music.receiver<br>
 	
 	net.kymjs.music	- APP启动及管理包
 	net.kymjs.music.ui - APP界面包
@@ -58,9 +59,14 @@ KJmusic
 	net.kymjs.music.inter - 所需接口包
 	net.kymjs.music.receiver - 接收全局广播
 	
-** 下面介绍一下项目中变量命名规则 **
-	
+## **二、项目的功能流程** ##
+#### 1、APP启动流程 ####
+	应用首次启动，将跳转至net.kymjs.music(以下称主包)下的AppStart，在载入动画和资源的同时判断是否为首次安装程序，之后跳转到相应的Activity（欢迎界面Welcome或主界面Main）。<br>
 
-
-
-
+#### 2、APP访问API流程 ####
+	**1) 初始化控件**<br>
+		首页Activity(Main.java)在initWidget()方法里面加载布局文件(Main.xml)，初始化底部栏bottomBar并设置点击事件监听。<br>
+		注：布局文件在/res/layout目录，点击事件监听器写在widgetClick()方法中。<br>
+	**2) 异步线程访问**<br>
+	**3) 解析数据显示**<br>
+		数据解析类统一写在resolve包下<br>
