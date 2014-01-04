@@ -3,4 +3,70 @@
     android:id="@+id/lrc_pager_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
+
+    <!-- 歌词界面隐藏的菜单 -->
+
+    <RelativeLayout
+        android:id="@+id/lrc_hidemenu"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true" >
+
+        <LinearLayout
+            android:id="@+id/lrc_menu"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:gravity="center"
+            android:orientation="horizontal" >
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/lrc_hidemenu_img_album"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp"
+                    android:src="@drawable/selector_hidemenu_album" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/lrc_hidemenu_img_album"
+                    android:text="查看专辑" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="70dp"
+                android:layout_weight="1"
+                android:gravity="center" >
+
+                <ImageView
+                    android:id="@+id/lrc_hidemenu_img_singer"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:padding="5dp"
+                    android:src="@drawable/selector_hidemenu_singer" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_below="@+id/lrc_hidemenu_img_singer"
+                    android:text="查看歌手" />
+            </RelativeLayout>
+        </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/lrc_hidemenu_seekbar"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_below="@+id/lrc_menu" />
+    </RelativeLayout>
+
 </RelativeLayout>

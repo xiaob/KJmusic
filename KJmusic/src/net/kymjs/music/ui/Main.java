@@ -56,7 +56,7 @@ public class Main extends BaseActivity {
     private TextView mTvTitle, mTvArtist;
 
     // 歌词界面需要的变量
-    public boolean isOpen = false;// lyric当前是否为显示
+    public boolean isOpen = false;// content当前是否为显示
     private int screenHeight = 0;// lyric显示的高度
     private FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
     private View lyricView;
@@ -67,7 +67,6 @@ public class Main extends BaseActivity {
         setUpMenu();
         changeFragment(new MainFragment(), false);
         changeFragment(R.id.main_layout_lyric, new LyricFragment(), false);
-
         initBottonBar();
     }
 
@@ -83,6 +82,7 @@ public class Main extends BaseActivity {
         lyricView = findViewById(R.id.main_aty_lyric);
         contentParams.topMargin = screenHeight;
         lyricView.setLayoutParams(contentParams);
+        resideMenu.addIgnoredView(lyricView);
 
         Intent serviceIntent = new Intent(this, PlayerService.class);
         this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);

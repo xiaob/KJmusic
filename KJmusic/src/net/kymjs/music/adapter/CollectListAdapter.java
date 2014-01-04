@@ -13,6 +13,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+/**
+ * 收藏列表适配器
+ * 
+ * @author kymjs
+ */
 public class CollectListAdapter extends AbsPlayListAdapter {
 
     private Context context;

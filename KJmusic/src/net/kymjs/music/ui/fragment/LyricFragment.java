@@ -16,8 +16,13 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+/**
+ * 歌词界面
+ * 
+ * @author kymjs
+ */
 public class LyricFragment extends BaseFragment {
-
+    // 歌词部分的控件
     private TabLayout mScrollLayout;
     private ListView mPlayList;
 
@@ -32,6 +37,13 @@ public class LyricFragment extends BaseFragment {
     public void initWidget(View parentView) {
         initScrollLayout(parentView);
         ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
+        initPlayList(parentView);
+    }
+
+    /**
+     * 初始化播放列表控件
+     */
+    private void initPlayList(View parentView) {
         mPlayList = (ListView) parentView.findViewById(R.id.lrc_pager_list);
         mPlayList.setAdapter(new LrcListAdapter(getActivity()));
         mPlayList.setOnItemClickListener(new OnItemClickListener() {

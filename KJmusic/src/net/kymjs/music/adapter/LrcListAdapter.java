@@ -12,7 +12,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * 歌词界面播放列表适配器
+ * @author kymjs
+ */
 public class LrcListAdapter extends BaseAdapter {
 
     private Context context;

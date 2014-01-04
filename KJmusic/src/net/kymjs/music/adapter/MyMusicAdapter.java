@@ -19,7 +19,6 @@ import android.widget.TextView;
  * 本地音乐ListView适配器
  * 
  * @author kymjs
- * 
  */
 public class MyMusicAdapter extends AbsPlayListAdapter {
     private Context mContext;

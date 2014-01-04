@@ -1,27 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/lrc_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_img_menuback_cool" >
 
+    <!-- 黑色过滤图片 -->
+
     <ImageView
         android:id="@+id/lrc_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
-    <net.kymjs.music.ui.widget.TabLayout
-        android:id="@+id/lrc_tablayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingTop="60dp" >
-
-        <include layout="@layout/frag_lyric_list" />
-
-        <include layout="@layout/frag_lyric_main" />
-
-        <include layout="@layout/frag_lyric_lrc" />
-    </net.kymjs.music.ui.widget.TabLayout>
+    <!-- 顶部的小点点 -->
 
     <RadioGroup
         android:id="@+id/lrc_circle_layout"
@@ -34,4 +24,24 @@
         android:orientation="horizontal" >
     </RadioGroup>
 
-</FrameLayout>
+    <SeekBar
+        android:id="@+id/lrc_seekbar_music"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <net.kymjs.music.ui.widget.TabLayout
+        android:id="@+id/lrc_tablayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/lrc_seekbar_music"
+        android:layout_marginTop="60dp" >
+
+        <include layout="@layout/frag_lyric_list" />
+
+        <include layout="@layout/frag_lyric_main" />
+
+        <include layout="@layout/frag_lyric_lrc" />
+    </net.kymjs.music.ui.widget.TabLayout>
+
+</RelativeLayout>
