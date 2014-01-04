@@ -22,6 +22,7 @@ import android.content.ServiceConnection;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -66,6 +67,7 @@ public class Main extends BaseActivity {
         setUpMenu();
         changeFragment(new MainFragment(), false);
         changeFragment(R.id.main_layout_lyric, new LyricFragment(), false);
+
         initBottonBar();
     }
 
@@ -76,7 +78,8 @@ public class Main extends BaseActivity {
         WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         screenHeight = window.getDefaultDisplay().getHeight();
         int width = window.getDefaultDisplay().getWidth();
-        contentParams = new FrameLayout.LayoutParams(width, screenHeight);
+        contentParams = new FrameLayout.LayoutParams(width,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
         lyricView = findViewById(R.id.main_aty_lyric);
         contentParams.topMargin = screenHeight;
         lyricView.setLayoutParams(contentParams);
@@ -179,7 +182,6 @@ public class Main extends BaseActivity {
         Player player = Player.getPlayer();
         switch (v.getId()) {
         case R.id.bottom_bar:
-            // changeFragment(new LyricFragment(), false);
             wantScroll(this);
             break;
         case R.id.bottom_btn_next:
@@ -299,6 +301,18 @@ public class Main extends BaseActivity {
                 refreshBottomBar();
             }
         }
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (isOpen) {
+                wantScroll(this);
+            } else {
+                AppManager.getAppManager().AppExit(this);
+            }
+        }
+        return true;
     }
 
     /************************************************************************************

@@ -84,6 +84,5 @@ public class LyricFragment extends BaseFragment {
 
     @Override
     public void widgetClick(View parentView) {
-
     }
 }

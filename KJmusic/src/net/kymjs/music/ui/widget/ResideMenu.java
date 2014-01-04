@@ -332,6 +332,11 @@ public class ResideMenu extends FrameLayout implements
      * 添加不拦截触摸事件的控件
      */
     public void addIgnoredView(View v) {
+        for (int i = 0; i < ignoredViews.size(); i++) {
+            if (v == ignoredViews.get(i)) {
+                return;
+            }
+        }
         ignoredViews.add(v);
     }
 

@@ -77,10 +77,11 @@ public class TabLayout extends ViewGroup {
                     "ScrollLayout only canmCurScreen run at EXACTLY mode!");
         }
         final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
-        if (heightMode != MeasureSpec.EXACTLY) {
-            throw new IllegalStateException(
-                    "ScrollLayout only can run at EXACTLY mode!");
-        }
+        // 由于与底部升起的抽屉效果冲突，Main.java中必须改为FrameLayout.LayoutParams.WRAP_CONTENT，所以这里的异常检测去除
+        // if (heightMode != MeasureSpec.EXACTLY) {
+        // throw new IllegalStateException(
+        // "ScrollLayout only can run at EXACTLY mode!");
+        // }
 
         // The children are given the same width and height as the scrollLayout
         final int count = getChildCount();
@@ -201,11 +202,9 @@ public class TabLayout extends ViewGroup {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        /******** New Code @kymjs **********/
         if (!isScroll) {
             return false;
         }
-        /******** New Code **********/
         final int action = ev.getAction();
         if ((action == MotionEvent.ACTION_MOVE)
                 && (mTouchState != TOUCH_STATE_REST)) {

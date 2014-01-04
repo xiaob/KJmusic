@@ -159,7 +159,7 @@ public class MainFragment extends BaseFragment {
      */
     private void resideLogic(int arg0) {
         if (arg0 == 0) {
-            resideMenu.clearIgnoredViewList();
+            resideMenu.removeIgnoredView(jsViewPager);
         } else {
             resideMenu.addIgnoredView(jsViewPager);
         }
@@ -200,7 +200,7 @@ public class MainFragment extends BaseFragment {
         public void onReceive(Context context, Intent intent) {
             if (Config.RECEIVER_MUSIC_SCAN_SUCCESS.equalsIgnoreCase(intent
                     .getAction())) {
-                // 我不知道为什么，调用刷新方法却没有刷新控件，好像必须销毁ListView再重新创建才能有刷新作用 
+                // 我不知道为什么，调用刷新方法却没有刷新控件，好像必须销毁ListView再重新创建才能有刷新作用
                 // if (collectAdp != null) {
                 // collectAdp.refresh();
                 // mCollectList.invalidate();
@@ -296,6 +296,7 @@ public class MainFragment extends BaseFragment {
             case 2:
                 break;
             }
+            ((Main) getActivity()).wantScroll((Main) getActivity());
         }
     }
 }
