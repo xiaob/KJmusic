@@ -58,6 +58,7 @@
             android:layout_width="70dp"
             android:layout_height="70dp"
             android:layout_centerInParent="true"
+            android:background="#19a0e4"
             android:src="@drawable/selector_radio_play" />
 
         <ImageView
@@ -75,8 +76,26 @@
             android:layout_height="37dp"
             android:layout_toRightOf="@+id/lrc_btn_play"
             android:src="@drawable/selector_radio_next" />
+
+        <ImageView
+            android:id="@+id/lrc_btn_loop"
+            style="@style/lrc_bottom"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="10dp"
+            android:src="@drawable/bt_playing_mode_cycle" />
+
+        <ImageView
+            android:id="@+id/lrc_btn_menu"
+            style="@style/lrc_bottom"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/bt_playing_mode_cycle" />
     </RelativeLayout>
-    
+
     <!-- 歌词界面内容部分 -->
 
     <net.kymjs.music.ui.widget.TabLayout
@@ -92,7 +111,7 @@
 
         <include layout="@layout/frag_lyric_lrc" />
     </net.kymjs.music.ui.widget.TabLayout>
-    
+
     <!-- 歌曲播放进度条 -->
 
     <SeekBar

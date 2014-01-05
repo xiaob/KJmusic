@@ -8,10 +8,13 @@ import net.kymjs.music.ui.widget.TabLayout.OnViewChangeListener;
 import net.kymjs.music.utils.Player;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -26,6 +29,12 @@ public class LyricFragment extends BaseFragment {
     private TabLayout mScrollLayout;
     private ListView mPlayList;
 
+    // 底部栏控件
+    private View bottomBar;
+    private ImageView mImgPlay;
+    private ImageView mImgPrevious;
+    private ImageView mImgNext;
+
     @Override
     public View setView(LayoutInflater inflater, ViewGroup container,
             Bundle bundle) {
@@ -36,6 +45,18 @@ public class LyricFragment extends BaseFragment {
     @Override
     public void initWidget(View parentView) {
         initScrollLayout(parentView);
+        bottomBar = parentView.findViewById(R.id.lrc_bottom);
+        bottomBar.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        mImgPlay = (ImageView) parentView.findViewById(R.id.lrc_btn_play);
+        mImgPrevious = (ImageView) parentView.findViewById(R.id.lrc_btn_prev);
+        mImgNext = (ImageView) parentView.findViewById(R.id.lrc_btn_next);
+        mImgPlay.setOnClickListener(this);
+        mImgPrevious.setOnClickListener(this);
+        mImgNext.setOnClickListener(this);
         ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
         initPlayList(parentView);
     }
@@ -96,5 +117,11 @@ public class LyricFragment extends BaseFragment {
 
     @Override
     public void widgetClick(View parentView) {
+        switch (parentView.getId()) {
+        case R.id.lrc_bottom:
+            break;
+        default:
+            break;
+        }
     }
 }

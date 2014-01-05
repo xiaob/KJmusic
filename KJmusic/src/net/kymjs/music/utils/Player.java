@@ -29,8 +29,10 @@ public class Player {
     private Context context;
 
     private Player() {
-        list = ListData.getLocalList(AppManager.getAppManager()
-                .currentActivity());
+        if (list == null) {
+            list = ListData.getLocalList(AppManager.getAppManager()
+                    .currentActivity());
+        }
     }
 
     public static Player getPlayer() {
@@ -117,7 +119,11 @@ public class Player {
         }
         media = MediaPlayer.create(context,
                 Uri.parse("file://" + list.get(position).getPath()));
-        media.start();
+        try {
+            media.start();
+        } catch (NullPointerException e) {
+            UIHelper.toast("亲，找不到歌曲了，存储卡拔掉了吗？");
+        }
         this.list = list;
         this.position = position;
         this.context = context;
