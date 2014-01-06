@@ -48,6 +48,7 @@ public class LyricFragment extends BaseFragment {
     private SeekThread mSeekThread = new SeekThread();
     private SeekHandle mSeekHandle = new SeekHandle();
     private Player mPlayer = Player.getPlayer();
+    FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME, Config.isDebug);
 
     // 底部栏控件
     private ImageView mImgPlay;
@@ -251,14 +252,13 @@ public class LyricFragment extends BaseFragment {
             UIHelper.toast("点击");
             break;
         case R.id.lrc_main_collect:
-            FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME,
-                    Config.isDebug);
             Music music = mPlayer.getMusic();
             music.setCollect((music.getCollect() + 1) % 2);
             mBtnCollect.setBackgroundResource(getBtnCollectBg(music
                     .getCollect() != 0));
             db.update(music, "id = '" + music.getId() + "'");
             Config.changeCollectInfo = true;
+            Config.changeMusicInfo = true;
             getActivity().sendBroadcast(
                     new Intent(Config.RECEIVER_MUSIC_SCAN_SUCCESS));
             break;
