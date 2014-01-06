@@ -32,6 +32,14 @@ public class LrcListAdapter extends BaseAdapter {
         }
     }
 
+    public void refreshLrcAdapter() {
+        this.datas = Player.getPlayer().getList();
+        if (datas == null) {
+            datas = new ArrayList<Music>();
+        }
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return datas.size();

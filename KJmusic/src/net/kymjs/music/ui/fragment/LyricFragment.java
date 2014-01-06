@@ -6,6 +6,7 @@ import net.kymjs.music.ui.Main;
 import net.kymjs.music.ui.widget.TabLayout;
 import net.kymjs.music.ui.widget.TabLayout.OnViewChangeListener;
 import net.kymjs.music.utils.Player;
+import net.kymjs.music.utils.UIHelper;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,10 +15,12 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 /**
  * 歌词界面
@@ -25,15 +28,24 @@ import android.widget.RadioGroup;
  * @author kymjs
  */
 public class LyricFragment extends BaseFragment {
-    // 歌词部分的控件
+    // 主体部分的控件
     private TabLayout mScrollLayout;
-    private ListView mPlayList;
+    private View bottomBar;
 
     // 底部栏控件
-    private View bottomBar;
     private ImageView mImgPlay;
     private ImageView mImgPrevious;
     private ImageView mImgNext;
+
+    // 播放列表部分
+    private ListView mPlayList;
+    private LrcListAdapter adapter;
+
+    // 歌词main部分
+    private TextView mMusicTitle;
+    private TextView mMusicArtist;
+    private Button mBtnCollect;
+    private Button mBtnShared;
 
     @Override
     public View setView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +71,15 @@ public class LyricFragment extends BaseFragment {
         mImgNext.setOnClickListener(this);
         ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
         initPlayList(parentView);
+
+        mMusicTitle = (TextView) parentView.findViewById(R.id.lrc_main_title);
+        mMusicTitle.setText(Player.getPlayer().getMusic().getTitle());
+        mMusicArtist = (TextView) parentView.findViewById(R.id.lrc_main_artist);
+        mMusicArtist.setText(Player.getPlayer().getMusic().getArtist());
+        mBtnCollect = (Button) parentView.findViewById(R.id.lrc_main_collect);
+        mBtnShared = (Button) parentView.findViewById(R.id.lrc_main_share);
+        mBtnCollect.setOnClickListener(this);
+        mBtnShared.setOnClickListener(this);
     }
 
     /**
@@ -66,7 +87,8 @@ public class LyricFragment extends BaseFragment {
      */
     private void initPlayList(View parentView) {
         mPlayList = (ListView) parentView.findViewById(R.id.lrc_pager_list);
-        mPlayList.setAdapter(new LrcListAdapter(getActivity()));
+        adapter = new LrcListAdapter(getActivity());
+        mPlayList.setAdapter(adapter);
         mPlayList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
@@ -118,10 +140,31 @@ public class LyricFragment extends BaseFragment {
     @Override
     public void widgetClick(View parentView) {
         switch (parentView.getId()) {
-        case R.id.lrc_bottom:
+        case R.id.lrc_main_share:
+            UIHelper.toast("点击");
             break;
-        default:
+        case R.id.lrc_main_collect:
+            UIHelper.toast("点击收藏");
             break;
         }
+    }
+
+    /**
+     * 刷新歌词界面
+     */
+    public void refreshLrcView() {
+        if (adapter != null) {
+            adapter.refreshLrcAdapter();
+        }
+        mMusicTitle.setText(Player.getPlayer().getMusic().getTitle());
+        mMusicArtist.setText(Player.getPlayer().getMusic().getArtist());
+        mBtnCollect.setBackgroundResource(getBtnCollectBg(Player.getPlayer()
+                .getMusic().getCollect() != 0));
+    }
+
+    // 获取收藏按钮背景
+    private int getBtnCollectBg(boolean isCollect) {
+        return isCollect ? R.drawable.selector_lrc_collected
+                : R.drawable.selector_lrc_collect;
     }
 }

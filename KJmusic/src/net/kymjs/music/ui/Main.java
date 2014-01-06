@@ -60,13 +60,15 @@ public class Main extends BaseActivity {
     private int screenHeight = 0;// lyric显示的高度
     private FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
     private View lyricView;
+    private LyricFragment lyricFragment;
 
     @Override
     public void initWidget() {
         setContentView(R.layout.main_activity);
         setUpMenu();
+        lyricFragment = new LyricFragment();
         changeFragment(new MainFragment(), false);
-        changeFragment(R.id.main_layout_lyric, new LyricFragment(), false);
+        changeFragment(R.id.main_layout_lyric, lyricFragment, false);
         initBottonBar();
     }
 
@@ -300,6 +302,7 @@ public class Main extends BaseActivity {
             if (Player.getPlayer().getPlaying() != Config.PLAYING_STOP) {
                 refreshBottomBar();
             }
+            lyricFragment.refreshLrcView();
         }
     }
 
