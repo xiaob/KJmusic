@@ -184,7 +184,7 @@ public class Main extends BaseActivity {
         Player player = Player.getPlayer();
         switch (v.getId()) {
         case R.id.bottom_bar:
-            wantScroll(this);
+            wantScroll();
             break;
         case R.id.bottom_btn_next:
             mPlayersService.next();
@@ -310,7 +310,7 @@ public class Main extends BaseActivity {
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             if (isOpen) {
-                wantScroll(this);
+                wantScroll();
             } else {
                 AppManager.getAppManager().AppExit(this);
             }
@@ -331,17 +331,25 @@ public class Main extends BaseActivity {
         }
     }
 
-    public void scrollToLrc() {
+    private void wantScroll() {
+        if (isOpen) {
+            scrollToLrc();
+        } else {
+            scrollToContent();
+        }
+    }
+
+    private void scrollToLrc() {
         new ScrollTask().execute(15);
         isOpen = false;
     }
 
-    public void scrollToContent() {
+    private void scrollToContent() {
         new ScrollTask().execute(-15);
         isOpen = true;
     }
 
-    public void sleep(long millis) {
+    private void sleep(long millis) {
         try {
             Thread.sleep(millis);
         } catch (InterruptedException e) {

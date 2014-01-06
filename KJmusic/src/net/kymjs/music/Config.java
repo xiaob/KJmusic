@@ -18,6 +18,9 @@ public class Config {
     public static final int MODE_REPEAT_ALL = 1;
     public static final int MODE_SEQUENCE = 2;
     public static final int MODE_RANDOM = 3;
+    /** 播放列表循环模式本地存储 */
+    public static final String LOOP_MODE_FILE = "loop_mode_file";
+    public static final String LOOP_MODE_KEY = "loop_mode_key";
 
     /** 播放器状态 */
     public static final int PLAYING_STOP = 0;
@@ -26,10 +29,10 @@ public class Config {
 
     /** 音乐改变的广播 */
     public static final String RECEIVER_MUSIC_CHANGE = "com.kymjs.music.music_change";
-
     /** 歌曲扫描完成广播 */
     public static final String RECEIVER_MUSIC_SCAN_SUCCESS = "com.kymjs.music.music_scan_success";
     public static final String RECEIVER_MUSIC_SCAN_FAIL = "com.kymjs.music.music_scan_fail";
+
     /** 音乐列表信息被改变 */
     public static boolean changeMusicInfo = false;
     public static boolean changeCollectInfo = false;
