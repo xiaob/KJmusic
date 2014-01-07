@@ -1,5 +1,6 @@
 package net.kymjs.music.ui.fragment;
 
+import net.kymjs.music.AppLog;
 import net.kymjs.music.Config;
 import net.kymjs.music.R;
 import net.kymjs.music.adapter.LrcListAdapter;
@@ -18,6 +19,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.VelocityTracker;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RadioButton;
@@ -41,7 +44,6 @@ import android.widget.TextView;
 public class LyricFragment extends BaseFragment {
     // 主体部分的控件
     private TabLayout mScrollLayout;
-    private View bottomBar;
     private Button mBtnBack;
     private CheckBox mCboxWordImg;
     private SeekBar mSeekBarMusic;
@@ -49,19 +51,26 @@ public class LyricFragment extends BaseFragment {
     private SeekHandle mSeekHandle = new SeekHandle();
     private Player mPlayer = Player.getPlayer();
     FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME, Config.isDebug);
+    // 从activity中获取的变量
+    private FrameLayout.LayoutParams contentParams;
+    private View lyricView;
+    private int screenHeight;
 
     // 底部栏控件
+    private View bottomBar;
     private ImageView mImgPlay;
     private ImageView mImgPrevious;
     private ImageView mImgNext;
     private int loopMode;
     private ImageView mImgLoop;
+    private ImageView mImgMenu;
 
     // 播放列表部分
     private ListView mPlayList;
     private LrcListAdapter adapter;
 
     // 歌词main部分
+    private FrameLayout mLayoutMain;
     private TextView mMusicTitle;
     private TextView mMusicArtist;
     private Button mBtnCollect;
@@ -81,6 +90,10 @@ public class LyricFragment extends BaseFragment {
 
     @Override
     public void initWidget(View parentView) {
+        // 初始化从activity中获取的变量
+        contentParams = ((Main) getActivity()).contentParams;
+        lyricView = ((Main) getActivity()).lyricView;
+        screenHeight = ((Main) getActivity()).screenHeight;
         initScrollLayout(parentView);
         ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
         initSeekBar(parentView);
@@ -99,6 +112,8 @@ public class LyricFragment extends BaseFragment {
      * 初始化歌词界面中心部分
      */
     private void initLrcMainView(View parentView) {
+        mLayoutMain = (FrameLayout) parentView.findViewById(R.id.lrc_layout);
+        mLayoutMain.setOnTouchListener(new LrcTouchlisener());
         mMusicTitle = (TextView) parentView.findViewById(R.id.lrc_main_title);
         mMusicTitle.setText(mPlayer.getMusic().getTitle());
         mMusicArtist = (TextView) parentView.findViewById(R.id.lrc_main_artist);
@@ -183,6 +198,8 @@ public class LyricFragment extends BaseFragment {
         mImgLoop.setImageResource(getImgLoopBg());
         mPlayer.setMode(loopMode);
         mImgLoop.setOnClickListener(this);
+        mImgMenu = (ImageView) parentView.findViewById(R.id.lrc_btn_menu);
+        mImgMenu.setOnClickListener(this);
     }
 
     /**
@@ -206,16 +223,16 @@ public class LyricFragment extends BaseFragment {
      * 初始化主体界面
      */
     private void initScrollLayout(View parentView) {
+        int defScreen = 1; // 默认显示第几屏
         mScrollLayout = (TabLayout) parentView.findViewById(R.id.lrc_tablayout);
-        mScrollLayout.scrollToScreen(2);
+        mScrollLayout.setToScreen(defScreen);
         int mScrollChildCount = mScrollLayout.getChildCount();
-
         final RadioGroup circles = (RadioGroup) parentView
                 .findViewById(R.id.lrc_circle_layout);
         for (int i = 0; i < mScrollChildCount; i++) {
             circles.addView(getCircles());
-            ((RadioButton) circles.getChildAt(0)).setChecked(true);
         }
+        ((RadioButton) circles.getChildAt(defScreen)).setChecked(true);
         mScrollLayout.SetOnViewChangeListener(new OnViewChangeListener() {
             @Override
             public void OnViewChange(int view) {
@@ -295,6 +312,9 @@ public class LyricFragment extends BaseFragment {
             mImgLoop.setImageResource(getImgLoopBg());
             UIHelper.toast(loopModeStr[loopMode]);
             break;
+        case R.id.lrc_btn_menu:
+            UIHelper.toast("暂时不知道这里应该放什么");
+            break;
         }
     }
 
@@ -335,5 +355,96 @@ public class LyricFragment extends BaseFragment {
                 Config.LOOP_MODE_FILE, Config.LOOP_MODE_KEY,
                 Config.MODE_REPEAT_ALL);
         return loopModes[loopMode];
+    }
+
+    /***********************************************************************
+     * 
+     * 歌词界面主要部分的点击事件（用于手势下拉）
+     * 
+     ***********************************************************************/
+
+    /** 用于计算手指滑动的速度。 */
+    private VelocityTracker mVelocityTracker;
+
+    /** 滚动显示和隐藏lrc时，手指滑动需要达到的速度。 */
+    public static final int SNAP_VELOCITY = 200;
+
+    /** 此时Y坐标 */
+    float yDown = 0, yMove = 0, yUp = 0;
+
+    class LrcTouchlisener implements OnTouchListener {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            if (mScrollLayout.getCurScreen() == 1) {
+                createVelocityTracker(event);
+                switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    // 手指按下时记录此时Y坐标
+                    yDown = event.getRawY();
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    // 手指移动时，对比按下时的坐标，计算出移动的距离，来调整menu的leftMargin值，从而显示和隐藏menu
+                    yMove = event.getRawY();
+                    int distanceY = (int) (yMove - yDown);
+                    contentParams.topMargin = distanceY;
+                    lyricView.setLayoutParams(contentParams);
+                    break;
+                case MotionEvent.ACTION_UP:
+                    yUp = event.getRawY();
+                    changeMenuState();
+                    recycleVelocityTracker();
+                    break;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * 是否应该打开
+     */
+    private void changeMenuState() {
+        float y = yUp - yDown;
+        AppLog.kymjs("y=" + y + "-----yup=" + yUp + "-------yDown=" + yDown
+                + "-----歌词界面状态" + ((Main) getActivity()).isOpen);
+        if (y > 20 && getScrollVelocity() > SNAP_VELOCITY) {
+            // 关闭的（歌词界面正在呈现即将转入content界面）
+            ((Main) getActivity()).isOpen = true;
+        } else {
+            // 打开的（内容界面正在呈现即将转入lyric界面）
+            ((Main) getActivity()).isOpen = false;
+        }
+        ((Main) getActivity()).wantScroll((Main) getActivity());
+    }
+
+    /**
+     * 获取手指在content界面滑动的速度。
+     * 
+     * @return 滑动速度，以每秒钟移动了多少像素值为单位。
+     */
+    private int getScrollVelocity() {
+        mVelocityTracker.computeCurrentVelocity(1000);
+        int velocity = (int) mVelocityTracker.getXVelocity();
+        return Math.abs(velocity);
+    }
+
+    /**
+     * 创建VelocityTracker对象，并将触摸content界面的滑动事件加入到VelocityTracker当中。
+     */
+    private void createVelocityTracker(MotionEvent event) {
+        if (mVelocityTracker == null) {
+            mVelocityTracker = VelocityTracker.obtain();
+        }
+        mVelocityTracker.addMovement(event);
+    }
+
+    /**
+     * 回收VelocityTracker对象。
+     */
+    private void recycleVelocityTracker() {
+        mVelocityTracker.recycle();
+        mVelocityTracker = null;
     }
 }

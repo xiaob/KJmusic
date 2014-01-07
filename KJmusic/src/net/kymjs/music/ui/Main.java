@@ -57,15 +57,16 @@ public class Main extends BaseActivity {
 
     // 歌词界面需要的变量
     public boolean isOpen = false;// content当前是否为显示
-    private int screenHeight = 0;// lyric显示的高度
-    private FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
-    private View lyricView;
+    public int screenHeight = 0;// lyric显示的高度
+    public FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
+    public View lyricView;
     private LyricFragment lyricFragment;
 
     @Override
     public void initWidget() {
         setContentView(R.layout.main_activity);
         setUpMenu();
+        handleLrcView(); // 要放在lyricFragment之前调用
         lyricFragment = new LyricFragment();
         changeFragment(new MainFragment(), false);
         changeFragment(R.id.main_layout_lyric, lyricFragment, false);
@@ -75,7 +76,14 @@ public class Main extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // 处理歌词界面
+        Intent serviceIntent = new Intent(this, PlayerService.class);
+        this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
+    }
+
+    /**
+     * 处理歌词界面
+     */
+    private void handleLrcView() {
         WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         screenHeight = window.getDefaultDisplay().getHeight();
         int width = window.getDefaultDisplay().getWidth();
@@ -85,9 +93,6 @@ public class Main extends BaseActivity {
         contentParams.topMargin = screenHeight;
         lyricView.setLayoutParams(contentParams);
         resideMenu.addIgnoredView(lyricView);
-
-        Intent serviceIntent = new Intent(this, PlayerService.class);
-        this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -364,18 +369,13 @@ public class Main extends BaseActivity {
             // 根据传入的速度来滚动界面，当滚动到达左边界或右边界时，跳出循环。
             while (true) {
                 topMargin += speed[0];
-                if (topMargin > screenHeight - 61) {
-                    sleep(30);
-                    if (topMargin > screenHeight) {
-                        topMargin = screenHeight;
-                        break;
-                    }
-                } else if (topMargin < 61) {
-                    sleep(30);
-                    if (topMargin < 0) {
-                        topMargin = 0;
-                        break;
-                    }
+                if (topMargin > screenHeight) {
+                    topMargin = screenHeight;
+                    break;
+                }
+                if (topMargin < 0) {
+                    topMargin = 0;
+                    break;
                 }
                 publishProgress(topMargin);
                 // 每次循环使线程睡眠，这样肉眼才能够看到滚动动画。
