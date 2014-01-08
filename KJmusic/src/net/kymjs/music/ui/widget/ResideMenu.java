@@ -283,7 +283,7 @@ public class ResideMenu extends FrameLayout implements
     }
 
     /**
-     * 创建菜单弹跳退出的动画效果
+     * 创建菜单退出的动画效果
      * 
      * @param target
      * @param targetScaleX
@@ -309,7 +309,7 @@ public class ResideMenu extends FrameLayout implements
     }
 
     /**
-     * 创建菜单弹跳进入的动画效果
+     * 创建菜单打开的动画效果
      * 
      * @param target
      * @param targetScaleX
@@ -318,12 +318,10 @@ public class ResideMenu extends FrameLayout implements
      */
     private AnimatorSet buildScaleUpAnimation(View target, float targetScaleX,
             float targetScaleY) {
-
         AnimatorSet scaleUp = new AnimatorSet();
         scaleUp.playTogether(
                 ObjectAnimator.ofFloat(target, "scaleX", targetScaleX),
                 ObjectAnimator.ofFloat(target, "scaleY", targetScaleY));
-
         scaleUp.setDuration(250);
         return scaleUp;
     }
@@ -438,7 +436,6 @@ public class ResideMenu extends FrameLayout implements
                 closeMenu();
             }
         }
-
         return false;
     }
 

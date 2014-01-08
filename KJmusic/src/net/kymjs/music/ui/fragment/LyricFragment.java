@@ -14,6 +14,7 @@ import net.kymjs.music.utils.UIHelper;
 import net.tsz.afinal.FinalDb;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,7 +51,8 @@ public class LyricFragment extends BaseFragment {
     private SeekThread mSeekThread = new SeekThread();
     private SeekHandle mSeekHandle = new SeekHandle();
     private Player mPlayer = Player.getPlayer();
-    FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME, Config.isDebug);
+    private FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME,
+            Config.isDebug);
     // 从activity中获取的变量
     private FrameLayout.LayoutParams contentParams;
     private View lyricView;
@@ -75,6 +77,7 @@ public class LyricFragment extends BaseFragment {
     private TextView mMusicArtist;
     private Button mBtnCollect;
     private Button mBtnShared;
+    private ImageView maskImg;
 
     private int[] loopModes = { R.drawable.bt_playing_mode_singlecycle,
             R.drawable.bt_playing_mode_order, R.drawable.bt_playing_mode_cycle,
@@ -359,6 +362,52 @@ public class LyricFragment extends BaseFragment {
 
     /***********************************************************************
      * 
+     * 仿百度音乐歌词界面滑动后黑色过滤蒙版效果
+     * 
+     ***********************************************************************/
+    private void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    class Mask extends AsyncTask<Integer, Integer, Void> {
+        private Integer startAlpha;
+        private Integer endAlpha;
+
+        @Override
+        protected Void doInBackground(Integer... params) {
+            while (true) {
+                startAlpha = params[0];
+                endAlpha = params[0];
+                if (startAlpha > endAlpha) {
+                    startAlpha -= 0x25;
+                    if (startAlpha < endAlpha) {
+                        break;
+                    }
+                } else {
+                    startAlpha += 0x25;
+                    if (startAlpha > endAlpha) {
+                        break;
+                    }
+                }
+                publishProgress(startAlpha);
+                sleep(100);
+            }
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            maskImg.setAlpha(values[0]);
+        }
+    }
+
+    /***********************************************************************
+     * 
      * 歌词界面主要部分的点击事件（用于手势下拉）
      * 
      ***********************************************************************/
@@ -409,7 +458,8 @@ public class LyricFragment extends BaseFragment {
         float y = yUp - yDown;
         AppLog.kymjs("y=" + y + "-----yup=" + yUp + "-------yDown=" + yDown
                 + "-----歌词界面状态" + ((Main) getActivity()).isOpen);
-        if (y > 20 && getScrollVelocity() > SNAP_VELOCITY) {
+        if ((y > screenHeight / 2 && getScrollVelocity() > 0)
+                || getScrollVelocity() > SNAP_VELOCITY) {
             // 关闭的（歌词界面正在呈现即将转入content界面）
             ((Main) getActivity()).isOpen = true;
         } else {
@@ -426,8 +476,9 @@ public class LyricFragment extends BaseFragment {
      */
     private int getScrollVelocity() {
         mVelocityTracker.computeCurrentVelocity(1000);
-        int velocity = (int) mVelocityTracker.getXVelocity();
-        return Math.abs(velocity);
+        int velocity = (int) mVelocityTracker.getYVelocity();
+        // return Math.abs(velocity);
+        return velocity;
     }
 
     /**

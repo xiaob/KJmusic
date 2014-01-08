@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_img_menuback_cool" >
 
-    <!-- 黑色过滤图片 -->
+    <!-- 黑色蒙版图片 -->
 
     <ImageView
         android:id="@+id/lrc_image"
