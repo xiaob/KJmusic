@@ -4,6 +4,11 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
+    <!-- 访问网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- 访问SD卡 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="17" />
@@ -28,6 +33,7 @@
 
         <service android:name="net.kymjs.music.service.ScanMusic" />
         <service android:name="net.kymjs.music.service.PlayerService" />
+        <service android:name="net.kymjs.music.service.MusicDownService" />
     </application>
 
 </manifest>

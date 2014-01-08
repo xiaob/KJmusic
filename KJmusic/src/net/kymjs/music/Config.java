@@ -28,12 +28,18 @@ public class Config {
     public static final int PLAYING_PLAY = 2;
 
     /** 音乐改变的广播 */
-    public static final String RECEIVER_MUSIC_CHANGE = "com.kymjs.music.music_change";
+    public static final String RECEIVER_MUSIC_CHANGE = "net.kymjs.music.music_change";
     /** 歌曲扫描完成广播 */
-    public static final String RECEIVER_MUSIC_SCAN_SUCCESS = "com.kymjs.music.music_scan_success";
-    public static final String RECEIVER_MUSIC_SCAN_FAIL = "com.kymjs.music.music_scan_fail";
+    public static final String RECEIVER_MUSIC_SCAN_SUCCESS = "net.kymjs.music.music_scan_success";
+    public static final String RECEIVER_MUSIC_SCAN_FAIL = "net.kymjs.music.music_scan_fail";
 
     /** 音乐列表信息被改变 */
     public static boolean changeMusicInfo = false;
     public static boolean changeCollectInfo = false;
+
+    /** 歌词默认显示文字 */
+    public static final String LRC_TEXT = "点击搜索";
+
+    /** 下载歌曲信息xml的广播 */
+    public static final String RECEIVER_DOWNLOAD_XML = "net.kymjs.music.download.xml";
 }
