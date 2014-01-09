@@ -213,8 +213,7 @@ public class MainFragment extends BaseFragment {
                 mMyMusicList.setAdapter(myMusicAdp);
                 collectAdp = new CollectListAdapter(getActivity(), 1);
                 mCollectList.setAdapter(collectAdp);
-                ((Main) getActivity()).lyricFragment.adapter
-                        .refreshLrcAdapter();
+                ((Main) getActivity()).lyricFragment.refreshLrcView();
             } else {
                 UIHelper.toast("呀，扫描失败了，退出再进试试？");
             }

@@ -51,6 +51,9 @@ public class ScanMusic extends IntentService {
                 music.setPath(path);
                 music.setSize(size);
                 music.setCollect(0);
+                music.setDecode("");
+                music.setEncode("");
+                music.setLrcid("");
                 db.save(music);
                 AppLog.debug("找到音乐：" + music.getTitle());
             }

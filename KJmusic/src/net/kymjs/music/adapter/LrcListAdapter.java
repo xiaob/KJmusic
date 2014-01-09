@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.kymjs.music.R;
 import net.kymjs.music.bean.Music;
+import net.kymjs.music.utils.ListData;
 import net.kymjs.music.utils.Player;
 import android.content.Context;
 import android.view.View;
@@ -28,7 +29,10 @@ public class LrcListAdapter extends BaseAdapter {
         this.context = context;
         this.datas = Player.getPlayer().getList();
         if (datas == null) {
-            datas = new ArrayList<Music>();
+            datas = ListData.getCollectList(context);
+            if (datas == null) {
+                datas = new ArrayList<Music>();
+            }
         }
     }
 

@@ -33,7 +33,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -55,24 +54,31 @@ import android.widget.TextView;
  * @author kymjs
  */
 public class LyricFragment extends BaseFragment {
-    // 主体部分的控件
-    private TabLayout mScrollLayout;
-    private Button mBtnBack;
-    private CheckBox mCboxWordImg;
-    private SeekBar mSeekBarMusic;
+
+    private int[] loopModes = { R.drawable.bt_playing_mode_singlecycle,
+            R.drawable.bt_playing_mode_order, R.drawable.bt_playing_mode_cycle,
+            R.drawable.bt_playing_mode_shuffle };
+    private String[] loopModeStr = { "单曲播放", "单曲循环", "列表播放", "随机播放" };
+
     private SeekThread mSeekThread = new SeekThread();
     private SeekHandle mSeekHandle = new SeekHandle();
     private Player mPlayer = Player.getPlayer();
     private FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME,
             Config.isDebug);
-    private DownloadReceiver receiver = new DownloadReceiver();
     private DownMusicLrc mDownService;
+    private DownloadReceiver receiver = new DownloadReceiver();
     private DownloadService conn = new DownloadService();
 
     // 从activity中获取的变量
     private FrameLayout.LayoutParams contentParams;
     private View lyricView;
     private int screenHeight;
+
+    // 主体部分的控件
+    private TabLayout mScrollLayout;
+    private Button mBtnBack;
+    private CheckBox mCboxWordImg;
+    private SeekBar mSeekBarMusic;
 
     // 底部栏控件
     private View bottomBar;
@@ -94,14 +100,10 @@ public class LyricFragment extends BaseFragment {
     private Button mBtnCollect;
     private Button mBtnShared;
     private ImageView maskImg;
+
     // 歌词lyric部分
     private LrcView lrcView;
     private LyricHelper lyricHelper = new LyricHelper();
-
-    private int[] loopModes = { R.drawable.bt_playing_mode_singlecycle,
-            R.drawable.bt_playing_mode_order, R.drawable.bt_playing_mode_cycle,
-            R.drawable.bt_playing_mode_shuffle };
-    private String[] loopModeStr = { "单曲播放", "单曲循环", "列表播放", "随机播放" };
 
     @Override
     public View setView(LayoutInflater inflater, ViewGroup container,
@@ -110,6 +112,7 @@ public class LyricFragment extends BaseFragment {
         return view;
     }
 
+    // 在onCreate方法中注册歌词下载完成和歌曲xml下载完成的receiver，绑定下载歌词的service
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -131,51 +134,36 @@ public class LyricFragment extends BaseFragment {
 
     @Override
     public void initWidget(View parentView) {
-        // 初始化从activity中获取的变量
-        contentParams = ((Main) getActivity()).contentParams;
-        lyricView = ((Main) getActivity()).lyricView;
-        screenHeight = ((Main) getActivity()).screenHeight;
-        initScrollLayout(parentView);
-        ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
-        initSeekBar(parentView);
-        initBottomBar(parentView);
-        initPlayList(parentView);
-        initLrcMainView(parentView);
-        initLrcView(parentView);
-
         mBtnBack = (Button) parentView.findViewById(R.id.lrc_btn_back);
         mBtnBack.setOnClickListener(this);
         mCboxWordImg = (CheckBox) parentView
                 .findViewById(R.id.lrc_cbox_wordimg);
         mCboxWordImg.setOnClickListener(this);
+
+        // 初始化从activity中获取的变量
+        contentParams = ((Main) getActivity()).contentParams;
+        lyricView = ((Main) getActivity()).lyricView;
+        screenHeight = ((Main) getActivity()).screenHeight;
+
+        // 初始化主体控件并取消ResideMenu的触摸事件
+        initScrollLayout(parentView);
+        ((Main) getActivity()).getResideMenu().addIgnoredView(mScrollLayout);
+
+        initLrcView(parentView);
+        initLrcMainView(parentView);
+        initPlayList(parentView);
+
+        initSeekBar(parentView);
+        initBottomBar(parentView);
     }
 
+    /**
+     * 初始化歌词控件
+     */
     private void initLrcView(View parentView) {
         lrcView = (LrcView) parentView.findViewById(R.id.lyric_pager_lrcView);
-        lrcView.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 如果没有歌词
-                if (Config.LRC_TEXT.equals(lrcView.getLoadingTipText())) {
-                    Music music = mPlayer.getList().get(
-                            mPlayer.getListPosition());
-                    Intent downIntent = new Intent(getActivity(),
-                            DownMusicInfo.class);
-                    if (music.getlrcId() != null
-                            && music.getlrcId().length() > 2) {
-                        // 如果歌曲信息中已经有路径，则直接下载
-                        AppLog.kymjs("歌词fragment->165行--------"
-                                + music.getLrcUrl());
-                        mDownService.downLrc(music);
-                    } else {
-                        downIntent.putExtra("music", (Serializable) music);
-                        getActivity().startService(downIntent);
-                    }
-                }
-            }
-        });
-        Music music = mPlayer.getMusic();
-        lrcView.setLrc(lyricHelper.resolve(music));
+        lrcView.setOnClickListener(this);
+        lrcView.setLrc(lyricHelper.resolve(mPlayer.getMusic()));
     }
 
     /**
@@ -188,12 +176,101 @@ public class LyricFragment extends BaseFragment {
         mMusicTitle.setText(mPlayer.getMusic().getTitle());
         mMusicArtist = (TextView) parentView.findViewById(R.id.lrc_main_artist);
         mMusicArtist.setText(mPlayer.getMusic().getArtist());
+
         mBtnCollect = (Button) parentView.findViewById(R.id.lrc_main_collect);
         mBtnCollect.setBackgroundResource(getBtnCollectBg(mPlayer.getMusic()
                 .getCollect() != 0));
-        mBtnShared = (Button) parentView.findViewById(R.id.lrc_main_share);
         mBtnCollect.setOnClickListener(this);
+        mBtnShared = (Button) parentView.findViewById(R.id.lrc_main_share);
         mBtnShared.setOnClickListener(this);
+    }
+
+    /**
+     * 初始化播放列表控件
+     */
+    private void initPlayList(View parentView) {
+        mPlayList = (ListView) parentView.findViewById(R.id.lrc_pager_list);
+        adapter = new LrcListAdapter(getActivity());
+        mPlayList.setAdapter(adapter);
+        mPlayList.setOnItemClickListener(new OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                    int position, long id) {
+                ((Main) getActivity()).mPlayersService.play(mPlayer.getList(),
+                        position);
+            }
+        });
+    }
+
+    /**
+     * 初始化主体界面
+     */
+    private void initScrollLayout(View parentView) {
+        int defScreen = 1; // 默认显示第二屏
+        mScrollLayout = (TabLayout) parentView.findViewById(R.id.lrc_tablayout);
+        mScrollLayout.setToScreen(defScreen);
+        int scrollChildCount = mScrollLayout.getChildCount();
+        final RadioGroup circles = (RadioGroup) parentView
+                .findViewById(R.id.lrc_circle_layout);
+        for (int i = 0; i < scrollChildCount; i++) {
+            circles.addView(getCircles());
+        }
+        // 小点的默认显示
+        ((RadioButton) circles.getChildAt(defScreen)).setChecked(true);
+        mScrollLayout.SetOnViewChangeListener(new OnViewChangeListener() {
+            @Override
+            public void OnViewChange(int view) {
+                RadioButton circle = (RadioButton) circles.getChildAt(view);
+                circle.setChecked(true);
+                if (view == 1) {
+                    mCboxWordImg.setChecked(true);
+                } else if (view == 2) {
+                    mCboxWordImg.setChecked(false);
+                }
+            }
+        });
+    }
+
+    /**
+     * 获取一个"小点"
+     */
+    private RadioButton getCircles() {
+        RadioButton circle = new RadioButton(getActivity());
+        int dimen5 = (int) getResources().getDimension(R.dimen.space_5);
+        int dimen3 = (int) getResources().getDimension(R.dimen.space_3);
+        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(dimen5,
+                dimen5);
+        params.setMargins(dimen3, 0, dimen3, 0);
+        circle.setLayoutParams(params);
+        circle.setBackgroundResource(R.drawable.selector_rbtn_circle);
+        return circle;
+    }
+
+    /**
+     * 初始化歌词界面底部栏
+     */
+    private void initBottomBar(View parentView) {
+        bottomBar = parentView.findViewById(R.id.lrc_bottom);
+        // 防止底部栏点击事件穿透到Activity上
+        bottomBar.setOnTouchListener(new OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
+        mImgPlay = (ImageView) parentView.findViewById(R.id.lrc_btn_play);
+        mImgPlay.setImageResource(getBtnPlayBg());
+        mImgPlay.setOnClickListener(this);
+        mImgPrevious = (ImageView) parentView.findViewById(R.id.lrc_btn_prev);
+        mImgPrevious.setOnClickListener(this);
+        mImgNext = (ImageView) parentView.findViewById(R.id.lrc_btn_next);
+        mImgNext.setOnClickListener(this);
+
+        mImgLoop = (ImageView) parentView.findViewById(R.id.lrc_btn_loop);
+        mImgLoop.setImageResource(getImgLoopBg());
+        mPlayer.setMode(loopMode);
+        mImgLoop.setOnClickListener(this);
+
+        mImgMenu = (ImageView) parentView.findViewById(R.id.lrc_btn_menu);
+        mImgMenu.setOnClickListener(this);
     }
 
     /**
@@ -204,17 +281,14 @@ public class LyricFragment extends BaseFragment {
         mSeekBarMusic = (SeekBar) parentView
                 .findViewById(R.id.lrc_seekbar_music);
         mSeekBarMusic.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-            @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 mPlayer.seekTo(seekBar.getProgress());
             }
 
-            @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
                 mPlayer.seekTo(seekBar.getProgress());
             }
 
-            @Override
             public void onProgressChanged(SeekBar seekBar, int progress,
                     boolean fromUser) {
             }
@@ -247,103 +321,18 @@ public class LyricFragment extends BaseFragment {
         }
     }
 
-    /**
-     * 初始化歌词界面底部栏
-     */
-    private void initBottomBar(View parentView) {
-        bottomBar = parentView.findViewById(R.id.lrc_bottom);
-        bottomBar.setOnTouchListener(new OnTouchListener() {
-            public boolean onTouch(View v, MotionEvent event) {
-                return true;
-            }
-        });
-        mImgPlay = (ImageView) parentView.findViewById(R.id.lrc_btn_play);
-        mImgPlay.setImageResource(getBtnPlayBg());
-        mImgPrevious = (ImageView) parentView.findViewById(R.id.lrc_btn_prev);
-        mImgNext = (ImageView) parentView.findViewById(R.id.lrc_btn_next);
-        mImgPlay.setOnClickListener(this);
-        mImgPrevious.setOnClickListener(this);
-        mImgNext.setOnClickListener(this);
-        mImgLoop = (ImageView) parentView.findViewById(R.id.lrc_btn_loop);
-        mImgLoop.setImageResource(getImgLoopBg());
-        mPlayer.setMode(loopMode);
-        mImgLoop.setOnClickListener(this);
-        mImgMenu = (ImageView) parentView.findViewById(R.id.lrc_btn_menu);
-        mImgMenu.setOnClickListener(this);
-    }
-
-    /**
-     * 初始化播放列表控件
-     */
-    private void initPlayList(View parentView) {
-        mPlayList = (ListView) parentView.findViewById(R.id.lrc_pager_list);
-        adapter = new LrcListAdapter(getActivity());
-        mPlayList.setAdapter(adapter);
-        mPlayList.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view,
-                    int position, long id) {
-                ((Main) getActivity()).mPlayersService.play(mPlayer.getList(),
-                        position);
-            }
-        });
-    }
-
-    /**
-     * 初始化主体界面
-     */
-    private void initScrollLayout(View parentView) {
-        int defScreen = 1; // 默认显示第几屏
-        mScrollLayout = (TabLayout) parentView.findViewById(R.id.lrc_tablayout);
-        mScrollLayout.setToScreen(defScreen);
-        int mScrollChildCount = mScrollLayout.getChildCount();
-        final RadioGroup circles = (RadioGroup) parentView
-                .findViewById(R.id.lrc_circle_layout);
-        for (int i = 0; i < mScrollChildCount; i++) {
-            circles.addView(getCircles());
-        }
-        ((RadioButton) circles.getChildAt(defScreen)).setChecked(true);
-        mScrollLayout.SetOnViewChangeListener(new OnViewChangeListener() {
-            @Override
-            public void OnViewChange(int view) {
-                RadioButton circle = (RadioButton) circles.getChildAt(view);
-                circle.setChecked(true);
-                if (view == 1) {
-                    mCboxWordImg.setChecked(true);
-                } else if (view == 2) {
-                    mCboxWordImg.setChecked(false);
-                }
-            }
-        });
-    }
-
-    /**
-     * 获取一个"小点"
-     */
-    private RadioButton getCircles() {
-        RadioButton circle = new RadioButton(getActivity());
-        int dimen5 = (int) getResources().getDimension(R.dimen.space_5);
-        int dimen3 = (int) getResources().getDimension(R.dimen.space_3);
-        RadioGroup.LayoutParams params = new RadioGroup.LayoutParams(dimen5,
-                dimen5);
-        params.setMargins(dimen3, 0, dimen3, 0);
-        circle.setLayoutParams(params);
-        circle.setBackgroundResource(R.drawable.selector_rbtn_circle);
-        return circle;
-    }
-
     @Override
     public void widgetClick(View parentView) {
+        Music music = mPlayer.getMusic();
         switch (parentView.getId()) {
         case R.id.lrc_main_share:
-            UIHelper.toast("点击");
+            UIHelper.toast("点击了分享按钮");
             break;
         case R.id.lrc_main_collect:
-            Music music = mPlayer.getMusic();
             music.setCollect((music.getCollect() + 1) % 2);
+            db.update(music, "id = '" + music.getId() + "'");
             mBtnCollect.setBackgroundResource(getBtnCollectBg(music
                     .getCollect() != 0));
-            db.update(music, "id = '" + music.getId() + "'");
             Config.changeCollectInfo = true;
             Config.changeMusicInfo = true;
             getActivity().sendBroadcast(
@@ -353,11 +342,7 @@ public class LyricFragment extends BaseFragment {
             ((Main) getActivity()).wantScroll((Main) getActivity());
             break;
         case R.id.lrc_cbox_wordimg:
-            if (mCboxWordImg.isChecked()) {
-                mScrollLayout.scrollToScreen(1);
-            } else {
-                mScrollLayout.scrollToScreen(2);
-            }
+            mScrollLayout.scrollToScreen(mCboxWordImg.isChecked() ? 1 : 2);
             break;
         case R.id.lrc_btn_play:
             if (mPlayer.getPlaying() == Config.PLAYING_STOP) {
@@ -385,6 +370,20 @@ public class LyricFragment extends BaseFragment {
         case R.id.lrc_btn_menu:
             UIHelper.toast("暂时不知道这里应该放什么");
             break;
+        case R.id.lyric_pager_lrcView:
+            // 如果没有歌词
+            if (Config.LRC_TEXT.equals(lrcView.getLoadingTipText())) {
+                if (music.getlrcId() != null && music.getlrcId().length() > 2) {
+                    // 如果歌曲信息中已经有路径，则直接下载
+                    mDownService.downLrc(music);
+                } else {
+                    Intent downIntent = new Intent(getActivity(),
+                            DownMusicInfo.class);
+                    downIntent.putExtra("music", (Serializable) music);
+                    getActivity().startService(downIntent);
+                }
+            }
+            break;
         }
     }
 
@@ -392,9 +391,11 @@ public class LyricFragment extends BaseFragment {
      * 刷新歌词界面
      */
     public void refreshLrcView() {
-        if (adapter != null) {
-            adapter.refreshLrcAdapter();
-        }
+        // 同样的问题，无法直接刷新，需要重新setadapter();
+        // if (adapter != null) {
+        // adapter.refreshLrcAdapter();
+        // }
+        mPlayList.setAdapter(new LrcListAdapter(getActivity()));
         mMusicTitle.setText(mPlayer.getMusic().getTitle());
         mMusicArtist.setText(mPlayer.getMusic().getArtist());
         mBtnCollect.setBackgroundResource(getBtnCollectBg(mPlayer.getMusic()

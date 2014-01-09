@@ -4,15 +4,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import net.kymjs.music.AppLog;
 import net.kymjs.music.Config;
 import net.kymjs.music.bean.Music;
 import net.kymjs.music.parser.ParserMusicXML;
+import net.kymjs.music.utils.UIHelper;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -62,11 +59,12 @@ public class DownMusicInfo extends IntentService {
 
         String url = "http://box.zhangmen.baidu.com/x?op=12&count=1&title="
                 + music.getTitle() + "$$" + music.getArtist() + "$$$$";
-        try {
-            url = urlEncode(url.trim(), "utf-8");
-        } catch (UnsupportedEncodingException e2) {
-            e2.printStackTrace();
-        }
+        // try {
+        // url = urlEncode(url.trim(), "utf-8");
+        // } catch (UnsupportedEncodingException e2) {
+        // e2.printStackTrace();
+        // }
+        url = url.trim();
         HttpGet get = new HttpGet(url);
         BufferedReader br = null;
         try {
@@ -96,32 +94,17 @@ public class DownMusicInfo extends IntentService {
         // 数据获取到，开始解析
         AppLog.kymjs(getClass() + "-------网络请求：" + xml.toString());
         music = ParserMusicXML.ParserMusic(music, xml.toString());
-        // 下载完成，发送广播
-        Intent downxml = new Intent(Config.RECEIVER_DOWNLOAD_XML);
-        downxml.putExtra("music", (Serializable) music);
-        sendBroadcast(downxml);
-        // 更新数据库中数据
-//        FinalDb db = FinalDb.create(this);
-//        db.update(music, "id = '" + music.getId() + "'");
-    }
-
-    /**
-     * 转码http的网址，只对中文进行转码
-     * 
-     * @param str
-     * @param charset
-     * @return
-     * @throws UnsupportedEncodingException
-     */
-    private String urlEncode(String str, String charset)
-            throws UnsupportedEncodingException {
-        Pattern p = Pattern.compile("[\u4e00-\u9fa5]+");
-        Matcher m = p.matcher(str);
-        StringBuffer b = new StringBuffer();
-        while (m.find()) {
-            m.appendReplacement(b, URLEncoder.encode(m.group(0), charset));
+        if ("0000".equals(music.getlrcId())) {
+            UIHelper.toast(this,"歌词没有找到");
+        } else {
+            // 下载完成，发送广播
+            Intent downxml = new Intent(Config.RECEIVER_DOWNLOAD_XML);
+            downxml.putExtra("music", (Serializable) music);
+            sendBroadcast(downxml);
+            // 更新数据库中数据
+            // 总是提示没有music表，这是怎么回事？
+            // FinalDb db = FinalDb.create(this);
+            // db.update(music, "id = '" + music.getId() + "'");
         }
-        m.appendTail(b);
-        return b.toString();
     }
 }

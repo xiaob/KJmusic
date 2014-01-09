@@ -15,7 +15,8 @@ import android.os.Parcelable;
 public class Music implements Parcelable, Serializable {
     private static final long serialVersionUID = 1L;
 
-    // @Id(column="id")//设置自定义主键
+    // 设置自定义主键
+    // @Id(column = "id")
     private int id;
     private String title;
     private String artist;
