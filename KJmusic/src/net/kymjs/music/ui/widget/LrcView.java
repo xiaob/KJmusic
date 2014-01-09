@@ -2,6 +2,7 @@ package net.kymjs.music.ui.widget;
 
 import java.util.List;
 
+import net.kymjs.music.Config;
 import net.kymjs.music.utils.Player;
 import android.content.Context;
 import android.graphics.Canvas;
@@ -43,7 +44,7 @@ public class LrcView extends View implements ILrcView {
     private int mDisplayMode = DISPLAY_MODE_NORMAL;
     private LrcViewListener mLrcViewListener;
 
-    private String mLoadingLrcTip = "点击搜索";
+    private String mLoadingLrcTip = Config.LRC_TEXT;
 
     private float mLastMotionY;
     private PointF mPointerOneLastMotion = new PointF();
@@ -204,6 +205,10 @@ public class LrcView extends View implements ILrcView {
         mLoadingLrcTip = text;
     }
 
+    public String getLoadingTipText(){
+        return mLoadingLrcTip;
+    }
+    
     private void doScale(MotionEvent event) {
 
         if (mDisplayMode == DISPLAY_MODE_SEEK) {

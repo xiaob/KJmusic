@@ -60,7 +60,7 @@ public class Main extends BaseActivity {
     public int screenHeight = 0;// lyric显示的高度
     public FrameLayout.LayoutParams contentParams;// 通过此参数来更改lyric界面的位置。
     public View lyricView;
-    private LyricFragment lyricFragment;
+    public LyricFragment lyricFragment;
 
     @Override
     public void initWidget() {

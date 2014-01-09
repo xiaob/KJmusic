@@ -1,27 +1,39 @@
 package net.kymjs.music.ui.fragment;
 
+import java.io.Serializable;
+
 import net.kymjs.music.AppLog;
 import net.kymjs.music.Config;
 import net.kymjs.music.R;
 import net.kymjs.music.adapter.LrcListAdapter;
 import net.kymjs.music.bean.Music;
+import net.kymjs.music.service.DownMusicInfo;
+import net.kymjs.music.service.DownMusicLrc;
 import net.kymjs.music.ui.Main;
+import net.kymjs.music.ui.widget.LrcView;
 import net.kymjs.music.ui.widget.TabLayout;
 import net.kymjs.music.ui.widget.TabLayout.OnViewChangeListener;
+import net.kymjs.music.utils.LyricHelper;
 import net.kymjs.music.utils.Player;
 import net.kymjs.music.utils.PreferenceHelper;
 import net.kymjs.music.utils.UIHelper;
 import net.tsz.afinal.FinalDb;
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -53,6 +65,10 @@ public class LyricFragment extends BaseFragment {
     private Player mPlayer = Player.getPlayer();
     private FinalDb db = FinalDb.create(getActivity(), Config.DB_NAME,
             Config.isDebug);
+    private DownloadReceiver receiver = new DownloadReceiver();
+    private DownMusicLrc mDownService;
+    private DownloadService conn = new DownloadService();
+
     // 从activity中获取的变量
     private FrameLayout.LayoutParams contentParams;
     private View lyricView;
@@ -69,7 +85,7 @@ public class LyricFragment extends BaseFragment {
 
     // 播放列表部分
     private ListView mPlayList;
-    private LrcListAdapter adapter;
+    public LrcListAdapter adapter;
 
     // 歌词main部分
     private FrameLayout mLayoutMain;
@@ -78,6 +94,9 @@ public class LyricFragment extends BaseFragment {
     private Button mBtnCollect;
     private Button mBtnShared;
     private ImageView maskImg;
+    // 歌词lyric部分
+    private LrcView lrcView;
+    private LyricHelper lyricHelper = new LyricHelper();
 
     private int[] loopModes = { R.drawable.bt_playing_mode_singlecycle,
             R.drawable.bt_playing_mode_order, R.drawable.bt_playing_mode_cycle,
@@ -92,6 +111,25 @@ public class LyricFragment extends BaseFragment {
     }
 
     @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Config.RECEIVER_DOWNLOAD_XML);
+        filter.addAction(Config.RECEIVER_DOWNLOAD_LYRIC);
+        getActivity().registerReceiver(receiver, filter);
+        Intent downService = new Intent(getActivity(), DownMusicLrc.class);
+        getActivity().bindService(downService, conn, Context.BIND_AUTO_CREATE);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterReceiver(receiver);
+        getActivity().unbindService(conn);
+    }
+
+    @Override
     public void initWidget(View parentView) {
         // 初始化从activity中获取的变量
         contentParams = ((Main) getActivity()).contentParams;
@@ -103,12 +141,41 @@ public class LyricFragment extends BaseFragment {
         initBottomBar(parentView);
         initPlayList(parentView);
         initLrcMainView(parentView);
+        initLrcView(parentView);
 
         mBtnBack = (Button) parentView.findViewById(R.id.lrc_btn_back);
         mBtnBack.setOnClickListener(this);
         mCboxWordImg = (CheckBox) parentView
                 .findViewById(R.id.lrc_cbox_wordimg);
         mCboxWordImg.setOnClickListener(this);
+    }
+
+    private void initLrcView(View parentView) {
+        lrcView = (LrcView) parentView.findViewById(R.id.lyric_pager_lrcView);
+        lrcView.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 如果没有歌词
+                if (Config.LRC_TEXT.equals(lrcView.getLoadingTipText())) {
+                    Music music = mPlayer.getList().get(
+                            mPlayer.getListPosition());
+                    Intent downIntent = new Intent(getActivity(),
+                            DownMusicInfo.class);
+                    if (music.getlrcId() != null
+                            && music.getlrcId().length() > 2) {
+                        // 如果歌曲信息中已经有路径，则直接下载
+                        AppLog.kymjs("歌词fragment->165行--------"
+                                + music.getLrcUrl());
+                        mDownService.downLrc(music);
+                    } else {
+                        downIntent.putExtra("music", (Serializable) music);
+                        getActivity().startService(downIntent);
+                    }
+                }
+            }
+        });
+        Music music = mPlayer.getMusic();
+        lrcView.setLrc(lyricHelper.resolve(music));
     }
 
     /**
@@ -173,7 +240,7 @@ public class LyricFragment extends BaseFragment {
             super.handleMessage(msg);
             mSeekBarMusic.setMax(msg.arg1);
             mSeekBarMusic.setProgress(msg.arg2);
-            // mLrcView.seekLrcToTime(msg.arg2);
+            lrcView.seekLrcToTime(msg.arg2);
             // mTextProg.setText(StringUtils.timeFormat(msg.arg2));
             // mTextTotal.setText(StringUtils.timeFormat(msg.arg1));
             mSeekHandle.post(mSeekThread);
@@ -333,6 +400,7 @@ public class LyricFragment extends BaseFragment {
         mBtnCollect.setBackgroundResource(getBtnCollectBg(mPlayer.getMusic()
                 .getCollect() != 0));
         mImgPlay.setImageResource(getBtnPlayBg());
+        lrcView.setLrc(lyricHelper.resolve(mPlayer.getMusic()));
     }
 
     // 获取收藏按钮背景
@@ -360,51 +428,79 @@ public class LyricFragment extends BaseFragment {
         return loopModes[loopMode];
     }
 
-    /***********************************************************************
-     * 
-     * 仿百度音乐歌词界面滑动后黑色过滤蒙版效果
-     * 
-     ***********************************************************************/
-    private void sleep(long millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
+    class DownloadService implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mDownService = ((DownMusicLrc.DownLrcHolder) service).getService();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            UIHelper.toast("歌词下载异常，请重试");
         }
     }
 
-    class Mask extends AsyncTask<Integer, Integer, Void> {
-        private Integer startAlpha;
-        private Integer endAlpha;
-
+    class DownloadReceiver extends BroadcastReceiver {
         @Override
-        protected Void doInBackground(Integer... params) {
-            while (true) {
-                startAlpha = params[0];
-                endAlpha = params[0];
-                if (startAlpha > endAlpha) {
-                    startAlpha -= 0x25;
-                    if (startAlpha < endAlpha) {
-                        break;
-                    }
-                } else {
-                    startAlpha += 0x25;
-                    if (startAlpha > endAlpha) {
-                        break;
-                    }
-                }
-                publishProgress(startAlpha);
-                sleep(100);
+        public void onReceive(Context context, Intent intent) {
+            if (Config.RECEIVER_DOWNLOAD_XML.equals(intent.getAction())) {
+                Music music = (Music) intent.getSerializableExtra("music");
+                AppLog.kymjs("--------" + (music == null) + "-------"
+                        + (mDownService == null));
+                mDownService.downLrc(music);
+            } else {
+                // 下载完成，更新控件显示
+                lrcView.setLrc(new LyricHelper().resolve(mPlayer.getMusic()));
             }
-            return null;
-        }
-
-        @Override
-        protected void onProgressUpdate(Integer... values) {
-            super.onProgressUpdate(values);
-            maskImg.setAlpha(values[0]);
         }
     }
+
+    //
+    // /***********************************************************************
+    // *
+    // * 仿百度音乐歌词界面滑动后黑色过滤蒙版效果
+    // *
+    // ***********************************************************************/
+    // private void sleep(long millis) {
+    // try {
+    // Thread.sleep(millis);
+    // } catch (InterruptedException e) {
+    // e.printStackTrace();
+    // }
+    // }
+    //
+    // class Mask extends AsyncTask<Integer, Integer, Void> {
+    // private Integer startAlpha;
+    // private Integer endAlpha;
+    //
+    // @Override
+    // protected Void doInBackground(Integer... params) {
+    // while (true) {
+    // startAlpha = params[0];
+    // endAlpha = params[0];
+    // if (startAlpha > endAlpha) {
+    // startAlpha -= 0x25;
+    // if (startAlpha < endAlpha) {
+    // break;
+    // }
+    // } else {
+    // startAlpha += 0x25;
+    // if (startAlpha > endAlpha) {
+    // break;
+    // }
+    // }
+    // publishProgress(startAlpha);
+    // sleep(100);
+    // }
+    // return null;
+    // }
+    //
+    // @Override
+    // protected void onProgressUpdate(Integer... values) {
+    // super.onProgressUpdate(values);
+    // maskImg.setAlpha(values[0]);
+    // }
+    // }
 
     /***********************************************************************
      * 

@@ -2,6 +2,7 @@ package net.kymjs.music.bean;
 
 import java.io.Serializable;
 
+import net.kymjs.music.utils.StringUtils;
 import net.tsz.afinal.annotation.sqlite.Table;
 import android.os.Bundle;
 import android.os.Parcel;
@@ -21,20 +22,39 @@ public class Music implements Parcelable, Serializable {
     private String path;
     private String size;
     private int collect;
-
-    public Music(int id, String title, String artist, String path, String size,
-            int collect) {
-        super();
-        this.id = id;
-        this.title = title;
-        this.artist = artist;
-        this.path = path;
-        this.size = size;
-        this.collect = collect;
-    }
+    private String encode;
+    private String decode;
+    private String lrcid;
 
     public Music() {
         super();
+    }
+
+    public void setEncode(String encode) {
+        this.encode = encode;
+    }
+
+    public void setDecode(String decode) {
+        this.decode = decode;
+    }
+
+    public String getDownUrl() {
+        return this.encode + this.decode;
+    }
+
+    public String getlrcId() {
+        return lrcid;
+    }
+
+    public String getLrcUrl() {
+        int lrcid = StringUtils.toInt(this.lrcid, 0);
+        String url = "http://box.zhangmen.baidu.com/bdlrc/" + (lrcid / 100)
+                + "/" + lrcid + ".lrc";
+        return url;
+    }
+
+    public void setLrcid(String lrcid) {
+        this.lrcid = lrcid;
     }
 
     public int getId() {
@@ -94,6 +114,9 @@ public class Music implements Parcelable, Serializable {
         path = bundle.getString("path");
         size = bundle.getString("size");
         collect = bundle.getInt("collect");
+        encode = bundle.getString("encode");
+        decode = bundle.getString("decode");
+        lrcid = bundle.getString("lrcid");
     }
 
     @Override
@@ -110,6 +133,9 @@ public class Music implements Parcelable, Serializable {
         bundle.putString("path", path);
         bundle.putString("size", size);
         bundle.putInt("collect", collect);
+        bundle.putString("encode", encode);
+        bundle.putString("decode", decode);
+        bundle.putString("lrcid", lrcid);
         out.writeBundle(bundle);
     }
 

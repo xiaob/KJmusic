@@ -29,7 +29,7 @@ public class Player {
     private Context context;
 
     private Player() {
-        if (list == null) {
+        if (list == null || Config.changeMusicInfo) {
             list = ListData.getLocalList(AppManager.getAppManager()
                     .currentActivity());
         }
@@ -48,7 +48,15 @@ public class Player {
     }
 
     public Music getMusic() {
-        return list.get(position);
+        Music music = null;
+        if (position >= list.size()) {
+            music = new Music();
+            music.setArtist(Config.ARTIST);
+            music.setTitle(Config.TITLE);
+        } else {
+            music = list.get(position);
+        }
+        return music;
     }
 
     public void setMode(int mode) {

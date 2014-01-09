@@ -39,7 +39,11 @@ public class Config {
 
     /** 歌词默认显示文字 */
     public static final String LRC_TEXT = "点击搜索";
+    /** 是否自动加载歌词 */
+    public static final boolean isAuto = true;
 
     /** 下载歌曲信息xml的广播 */
     public static final String RECEIVER_DOWNLOAD_XML = "net.kymjs.music.download.xml";
+    /** 下载歌词的广播 */
+    public static final String RECEIVER_DOWNLOAD_LYRIC = "net.kymjs.music.download.lyric";
 }
