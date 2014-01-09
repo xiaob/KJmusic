@@ -13,6 +13,7 @@ import net.kymjs.music.ui.Main;
 import net.kymjs.music.ui.widget.LrcView;
 import net.kymjs.music.ui.widget.TabLayout;
 import net.kymjs.music.ui.widget.TabLayout.OnViewChangeListener;
+import net.kymjs.music.utils.ImageUtils;
 import net.kymjs.music.utils.LyricHelper;
 import net.kymjs.music.utils.Player;
 import net.kymjs.music.utils.PreferenceHelper;
@@ -55,11 +56,6 @@ import android.widget.TextView;
  */
 public class LyricFragment extends BaseFragment {
 
-    private int[] loopModes = { R.drawable.bt_playing_mode_singlecycle,
-            R.drawable.bt_playing_mode_order, R.drawable.bt_playing_mode_cycle,
-            R.drawable.bt_playing_mode_shuffle };
-    private String[] loopModeStr = { "单曲播放", "单曲循环", "列表播放", "随机播放" };
-
     private SeekThread mSeekThread = new SeekThread();
     private SeekHandle mSeekHandle = new SeekHandle();
     private Player mPlayer = Player.getPlayer();
@@ -68,6 +64,7 @@ public class LyricFragment extends BaseFragment {
     private DownMusicLrc mDownService;
     private DownloadReceiver receiver = new DownloadReceiver();
     private DownloadService conn = new DownloadService();
+    private static int changeImg = 1; // 更换图片的次数
 
     // 从activity中获取的变量
     private FrameLayout.LayoutParams contentParams;
@@ -79,15 +76,17 @@ public class LyricFragment extends BaseFragment {
     private Button mBtnBack;
     private CheckBox mCboxWordImg;
     private SeekBar mSeekBarMusic;
+    private ImageView musicImg;
 
     // 底部栏控件
     private View bottomBar;
     private ImageView mImgPlay;
     private ImageView mImgPrevious;
     private ImageView mImgNext;
-    private int loopMode;
     private ImageView mImgLoop;
     private ImageView mImgMenu;
+    private int loopMode;
+    private String[] loopModeStr = { "单曲播放", "单曲循环", "列表播放", "随机播放" };
 
     // 播放列表部分
     private ListView mPlayList;
@@ -99,7 +98,6 @@ public class LyricFragment extends BaseFragment {
     private TextView mMusicArtist;
     private Button mBtnCollect;
     private Button mBtnShared;
-    private ImageView maskImg;
 
     // 歌词lyric部分
     private LrcView lrcView;
@@ -178,11 +176,13 @@ public class LyricFragment extends BaseFragment {
         mMusicArtist.setText(mPlayer.getMusic().getArtist());
 
         mBtnCollect = (Button) parentView.findViewById(R.id.lrc_main_collect);
-        mBtnCollect.setBackgroundResource(getBtnCollectBg(mPlayer.getMusic()
-                .getCollect() != 0));
+        mBtnCollect.setBackgroundResource(ImageUtils.getBtnCollectBg(mPlayer
+                .getMusic().getCollect() != 0));
         mBtnCollect.setOnClickListener(this);
         mBtnShared = (Button) parentView.findViewById(R.id.lrc_main_share);
         mBtnShared.setOnClickListener(this);
+
+        musicImg = (ImageView) parentView.findViewById(R.id.lrc_image);
     }
 
     /**
@@ -257,7 +257,7 @@ public class LyricFragment extends BaseFragment {
             }
         });
         mImgPlay = (ImageView) parentView.findViewById(R.id.lrc_btn_play);
-        mImgPlay.setImageResource(getBtnPlayBg());
+        mImgPlay.setImageResource(ImageUtils.getBtnPlayBg());
         mImgPlay.setOnClickListener(this);
         mImgPrevious = (ImageView) parentView.findViewById(R.id.lrc_btn_prev);
         mImgPrevious.setOnClickListener(this);
@@ -265,7 +265,8 @@ public class LyricFragment extends BaseFragment {
         mImgNext.setOnClickListener(this);
 
         mImgLoop = (ImageView) parentView.findViewById(R.id.lrc_btn_loop);
-        mImgLoop.setImageResource(getImgLoopBg());
+        mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity(),
+                loopMode));
         mPlayer.setMode(loopMode);
         mImgLoop.setOnClickListener(this);
 
@@ -331,7 +332,7 @@ public class LyricFragment extends BaseFragment {
         case R.id.lrc_main_collect:
             music.setCollect((music.getCollect() + 1) % 2);
             db.update(music, "id = '" + music.getId() + "'");
-            mBtnCollect.setBackgroundResource(getBtnCollectBg(music
+            mBtnCollect.setBackgroundResource(ImageUtils.getBtnCollectBg(music
                     .getCollect() != 0));
             Config.changeCollectInfo = true;
             Config.changeMusicInfo = true;
@@ -352,7 +353,7 @@ public class LyricFragment extends BaseFragment {
             } else {
                 ((Main) getActivity()).mPlayersService.replay();
             }
-            mImgPlay.setImageResource(getBtnPlayBg());
+            mImgPlay.setImageResource(ImageUtils.getBtnPlayBg());
             break;
         case R.id.lrc_btn_prev:
             ((Main) getActivity()).mPlayersService.previous();
@@ -364,11 +365,14 @@ public class LyricFragment extends BaseFragment {
             PreferenceHelper.write(getActivity(), Config.LOOP_MODE_FILE,
                     Config.LOOP_MODE_KEY, loopMode = (loopMode + 1) % 4);
             mPlayer.setMode(loopMode);
-            mImgLoop.setImageResource(getImgLoopBg());
+            mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity(),
+                    loopMode));
             UIHelper.toast(loopModeStr[loopMode]);
             break;
         case R.id.lrc_btn_menu:
-            UIHelper.toast("暂时不知道这里应该放什么");
+            UIHelper.toast("正在更换歌曲图片");
+            ImageUtils.setNetBg(getActivity(), musicImg, music.getTitle(),
+                    changeImg++);
             break;
         case R.id.lyric_pager_lrcView:
             // 如果没有歌词
@@ -398,35 +402,12 @@ public class LyricFragment extends BaseFragment {
         mPlayList.setAdapter(new LrcListAdapter(getActivity()));
         mMusicTitle.setText(mPlayer.getMusic().getTitle());
         mMusicArtist.setText(mPlayer.getMusic().getArtist());
-        mBtnCollect.setBackgroundResource(getBtnCollectBg(mPlayer.getMusic()
-                .getCollect() != 0));
-        mImgPlay.setImageResource(getBtnPlayBg());
+        mBtnCollect.setBackgroundResource(ImageUtils.getBtnCollectBg(mPlayer
+                .getMusic().getCollect() != 0));
+        mImgPlay.setImageResource(ImageUtils.getBtnPlayBg());
         lrcView.setLrc(lyricHelper.resolve(mPlayer.getMusic()));
-    }
-
-    // 获取收藏按钮背景
-    private int getBtnCollectBg(boolean isCollect) {
-        return isCollect ? R.drawable.selector_lrc_collected
-                : R.drawable.selector_lrc_collect;
-    }
-
-    // 获取播放按钮背景
-    private int getBtnPlayBg() {
-        int background = 0;
-        if (mPlayer.getPlaying() == Config.PLAYING_PLAY) {
-            background = R.drawable.selector_radio_pause;
-        } else {
-            background = R.drawable.selector_radio_play;
-        }
-        return background;
-    }
-
-    // 获取循环播放控件背景
-    private int getImgLoopBg() {
-        loopMode = PreferenceHelper.readInt(getActivity(),
-                Config.LOOP_MODE_FILE, Config.LOOP_MODE_KEY,
-                Config.MODE_REPEAT_ALL);
-        return loopModes[loopMode];
+        ImageUtils.setNetBg(getActivity(), musicImg, mPlayer.getMusic()
+                .getTitle());
     }
 
     class DownloadService implements ServiceConnection {
@@ -455,53 +436,6 @@ public class LyricFragment extends BaseFragment {
             }
         }
     }
-
-    //
-    // /***********************************************************************
-    // *
-    // * 仿百度音乐歌词界面滑动后黑色过滤蒙版效果
-    // *
-    // ***********************************************************************/
-    // private void sleep(long millis) {
-    // try {
-    // Thread.sleep(millis);
-    // } catch (InterruptedException e) {
-    // e.printStackTrace();
-    // }
-    // }
-    //
-    // class Mask extends AsyncTask<Integer, Integer, Void> {
-    // private Integer startAlpha;
-    // private Integer endAlpha;
-    //
-    // @Override
-    // protected Void doInBackground(Integer... params) {
-    // while (true) {
-    // startAlpha = params[0];
-    // endAlpha = params[0];
-    // if (startAlpha > endAlpha) {
-    // startAlpha -= 0x25;
-    // if (startAlpha < endAlpha) {
-    // break;
-    // }
-    // } else {
-    // startAlpha += 0x25;
-    // if (startAlpha > endAlpha) {
-    // break;
-    // }
-    // }
-    // publishProgress(startAlpha);
-    // sleep(100);
-    // }
-    // return null;
-    // }
-    //
-    // @Override
-    // protected void onProgressUpdate(Integer... values) {
-    // super.onProgressUpdate(values);
-    // maskImg.setAlpha(values[0]);
-    // }
-    // }
 
     /***********************************************************************
      * 

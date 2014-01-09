@@ -5,12 +5,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/bg_img_menuback_cool" >
 
-    <!-- 黑色蒙版图片 -->
+    <!-- 专辑图片 -->
 
     <ImageView
         android:id="@+id/lrc_image"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_marginBottom="70dp"
+        android:alpha="77"
+        android:padding="5dp"
+        android:scaleType="fitCenter" />
     <!-- 顶部的小点点 -->
 
     <RadioGroup

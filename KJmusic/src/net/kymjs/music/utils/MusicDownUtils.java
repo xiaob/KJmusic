@@ -4,6 +4,11 @@ import net.tsz.afinal.FinalHttp;
 import net.tsz.afinal.http.AjaxCallBack;
 import net.tsz.afinal.http.AjaxParams;
 
+/**
+ * 歌曲下载帮助类
+ * 
+ * @author kymjs
+ */
 public class MusicDownUtils {
     public static String getLrcXML(String musicName, String artist) {
         String xml = null;

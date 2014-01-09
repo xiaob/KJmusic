@@ -46,4 +46,8 @@ public class Config {
     public static final String RECEIVER_DOWNLOAD_XML = "net.kymjs.music.download.xml";
     /** 下载歌词的广播 */
     public static final String RECEIVER_DOWNLOAD_LYRIC = "net.kymjs.music.download.lyric";
+
+    /** 更换图片 */
+    public static final String CHANGE_IMG_FILE = "change_img";
+    public static final String CHANGE_IMG_KEY = "change_img";
 }

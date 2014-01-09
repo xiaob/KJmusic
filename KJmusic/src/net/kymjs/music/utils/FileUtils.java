@@ -4,6 +4,10 @@ import java.io.File;
 
 import android.os.Environment;
 
+/**
+ * 获得文件存储路径
+ * @author kymjs
+ */
 public class FileUtils {
     private static final int NULL = 0;
     private static final int READ_ONLY = 1;
