@@ -10,6 +10,7 @@ import net.kymjs.music.Config;
 import net.kymjs.music.bean.Music;
 import net.kymjs.music.parser.ParserMusicXML;
 import net.kymjs.music.utils.UIHelper;
+import net.tsz.afinal.FinalDb;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -58,7 +59,8 @@ public class DownMusicInfo extends IntentService {
                 CoreProtocolPNames.HTTP_CONTENT_CHARSET, "utf-8");
 
         String url = "http://box.zhangmen.baidu.com/x?op=12&count=1&title="
-                + music.getTitle() + "$$" + music.getArtist() + "$$$$";
+                + music.getTitle().replace(" ", "") + "$$"
+                + music.getArtist().replace(" ", "") + "$$$$";
         // try {
         // url = urlEncode(url.trim(), "utf-8");
         // } catch (UnsupportedEncodingException e2) {
@@ -95,16 +97,15 @@ public class DownMusicInfo extends IntentService {
         AppLog.kymjs(getClass() + "-------网络请求：" + xml.toString());
         music = ParserMusicXML.ParserMusic(music, xml.toString());
         if ("0000".equals(music.getlrcId())) {
-            UIHelper.toast(this,"歌词没有找到");
+            UIHelper.toast(this, "歌词没有找到");
         } else {
             // 下载完成，发送广播
             Intent downxml = new Intent(Config.RECEIVER_DOWNLOAD_XML);
             downxml.putExtra("music", (Serializable) music);
             sendBroadcast(downxml);
             // 更新数据库中数据
-            // 总是提示没有music表，这是怎么回事？
-            // FinalDb db = FinalDb.create(this);
-            // db.update(music, "id = '" + music.getId() + "'");
+            FinalDb db = FinalDb.create(this);
+            db.update(music, "id = '" + music.getId() + "'");
         }
     }
 }

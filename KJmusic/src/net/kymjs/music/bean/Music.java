@@ -27,6 +27,18 @@ public class Music implements Parcelable, Serializable {
     private String decode;
     private String lrcid;
 
+    public String getEncode() {
+        return encode;
+    }
+
+    public String getDecode() {
+        return decode;
+    }
+
+    public String getLrcid() {
+        return lrcid;
+    }
+
     public Music() {
         super();
     }

@@ -64,7 +64,7 @@ public class LyricFragment extends BaseFragment {
     private DownMusicLrc mDownService;
     private DownloadReceiver receiver = new DownloadReceiver();
     private DownloadService conn = new DownloadService();
-    private static int changeImg = 1; // 更换图片的次数
+    public static int changeImg = 0; // 更换图片的次数
 
     // 从activity中获取的变量
     private FrameLayout.LayoutParams contentParams;
