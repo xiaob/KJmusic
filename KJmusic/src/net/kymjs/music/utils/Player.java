@@ -21,7 +21,7 @@ public class Player {
     private static Player player = new Player();
     private MediaPlayer media;
 
-    private int mode = Config.MODE_SEQUENCE;
+    private int mode = Config.MODE_REPEAT_ALL;
     private int playing = Config.PLAYING_STOP;
 
     private List<Music> list;

@@ -30,7 +30,7 @@
             </intent-filter>
         </activity>
         <activity android:name="net.kymjs.music.ui.Main" />
-        <activity android:name="net.kymjs.music.ui.Demo" />
+        <activity android:name="net.kymjs.music.ui.FirstInstallActivity" />
 
         <service android:name="net.kymjs.music.service.ScanMusic" />
         <service android:name="net.kymjs.music.service.PlayerService" />

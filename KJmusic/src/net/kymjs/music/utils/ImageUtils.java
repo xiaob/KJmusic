@@ -94,6 +94,7 @@ public class ImageUtils {
     public static int getImgLoopBg(Context context, int loopMode) {
         loopMode = PreferenceHelper.readInt(context, Config.LOOP_MODE_FILE,
                 Config.LOOP_MODE_KEY, Config.MODE_REPEAT_ALL);
+        Player.getPlayer().setMode(loopMode);
         return loopModes[loopMode];
     }
 }
