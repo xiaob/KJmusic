@@ -1,7 +1,9 @@
 package net.kymjs.music;
 
 import net.kymjs.music.service.ScanMusic;
+import net.kymjs.music.ui.FirstInstallActivity;
 import net.kymjs.music.ui.Main;
+import net.kymjs.music.utils.PreferenceHelper;
 import net.tsz.afinal.FinalActivity;
 import net.tsz.afinal.annotation.view.ViewInject;
 import android.content.Intent;
@@ -39,7 +41,7 @@ public class AppStart extends FinalActivity {
             @Override
             public void onAnimationEnd(Animation animation) {
                 redirectTo();
-//                loadRes();
+                // loadRes();
             }
         });
 
@@ -51,13 +53,30 @@ public class AppStart extends FinalActivity {
      */
     private void redirectTo() {
         Intent intent = new Intent();
-        intent.setClass(this, Main.class);
+        if (true) {
+            // if (firstsInstall()) {
+            intent.setClass(this, FirstInstallActivity.class);
+        } else {
+            intent.setClass(this, Main.class);
+        }
         startActivity(intent);
         overridePendingTransition(R.anim.in_from_right, R.anim.out_to_left);
         finish();
     }
-    
-    private void loadRes(){
+
+    /**
+     * 判断首次使用
+     */
+    private boolean firstsInstall() {
+        boolean isFirst = PreferenceHelper.readBoolean(this,
+                Config.FIRSTINSTALL_FILE, Config.FIRSTINSTALL_KEY);
+        return isFirst;
+    }
+
+    /**
+     * 扫描本地歌曲（暂不需要）
+     */
+    private void loadRes() {
         Intent it = new Intent();
         it.setClass(this, ScanMusic.class);
         startService(it);

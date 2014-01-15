@@ -81,21 +81,6 @@ public class Main extends BaseActivity {
         this.bindService(serviceIntent, conn, Context.BIND_AUTO_CREATE);
     }
 
-    /**
-     * 处理歌词界面显示方式
-     */
-    private void handleLrcView() {
-        WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
-        screenHeight = window.getDefaultDisplay().getHeight();
-        int width = window.getDefaultDisplay().getWidth();
-        contentParams = new FrameLayout.LayoutParams(width,
-                FrameLayout.LayoutParams.WRAP_CONTENT);
-        lyricView = findViewById(R.id.main_aty_lyric);
-        contentParams.topMargin = screenHeight;
-        lyricView.setLayoutParams(contentParams);
-        resideMenu.addIgnoredView(lyricView);
-    }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -109,6 +94,21 @@ public class Main extends BaseActivity {
     protected void onResume() {
         super.onResume();
         refreshBottomBar();
+    }
+
+    /**
+     * 处理歌词界面显示方式
+     */
+    private void handleLrcView() {
+        WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
+        screenHeight = window.getDefaultDisplay().getHeight();
+        int width = window.getDefaultDisplay().getWidth();
+        contentParams = new FrameLayout.LayoutParams(width,
+                FrameLayout.LayoutParams.WRAP_CONTENT);
+        lyricView = findViewById(R.id.main_aty_lyric);
+        contentParams.topMargin = screenHeight;
+        lyricView.setLayoutParams(contentParams);
+        resideMenu.addIgnoredView(lyricView);
     }
 
     /**
@@ -212,6 +212,9 @@ public class Main extends BaseActivity {
         }
     }
 
+    /**
+     * 菜单页点击事件监听器
+     */
     class MenuClickListener implements OnClickListener {
         @Override
         public void onClick(View v) {

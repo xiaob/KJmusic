@@ -8,6 +8,10 @@ public class Config {
     public static final String TITLE = "KJ音乐";
     public static final String ARTIST = "kymJS";
 
+    /** 应用是否首次安装 */
+    public static final String FIRSTINSTALL_FILE = "first";
+    public static final String FIRSTINSTALL_KEY = "firstinstall";
+
     /** 数据库名字 */
     public static final String DB_NAME = "kymjs_music_db";
     /** 是否启动调试模式 */
@@ -49,7 +53,7 @@ public class Config {
 
     /** 由于在intentService中无法显示toast */
     public static final String RECEIVER_ERROR = "net.kymjs.music.error";
-    
+
     /** 更换图片 */
     public static final String CHANGE_IMG_FILE = "change_img";
     public static final String CHANGE_IMG_KEY = "change_img";
