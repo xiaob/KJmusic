@@ -9,6 +9,7 @@ import net.kymjs.music.ui.fragment.LyricFragment;
 import net.kymjs.music.ui.fragment.MainFragment;
 import net.kymjs.music.ui.widget.ResideMenu;
 import net.kymjs.music.ui.widget.ResideMenuItem;
+import net.kymjs.music.utils.ImageUtils;
 import net.kymjs.music.utils.Player;
 import net.kymjs.music.utils.UIHelper;
 import android.app.Fragment;
@@ -81,7 +82,7 @@ public class Main extends BaseActivity {
     }
 
     /**
-     * 处理歌词界面
+     * 处理歌词界面显示方式
      */
     private void handleLrcView() {
         WindowManager window = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
@@ -100,6 +101,7 @@ public class Main extends BaseActivity {
         super.onStart();
         IntentFilter filter = new IntentFilter();
         filter.addAction(Config.RECEIVER_MUSIC_CHANGE);
+        filter.addAction(Config.RECEIVER_ERROR);
         registerReceiver(changeReceiver, filter);
     }
 
@@ -200,14 +202,12 @@ public class Main extends BaseActivity {
         case R.id.bottom_btn_play:
             if (player.getPlaying() == Config.PLAYING_PLAY) {
                 mPlayersService.pause();
-                v.setBackgroundResource(R.drawable.selector_btn_play);
             } else if (player.getPlaying() == Config.PLAYING_PAUSE) {
                 mPlayersService.replay();
-                v.setBackgroundResource(R.drawable.selector_btn_pause);
             } else {
                 mPlayersService.play();
-                v.setBackgroundResource(R.drawable.selector_btn_pause);
             }
+            v.setBackgroundResource(ImageUtils.getBtnMusicPlayBg());
             break;
         }
     }
@@ -216,13 +216,10 @@ public class Main extends BaseActivity {
         @Override
         public void onClick(View v) {
             if (v == itemDown) {
-                // changeFragment(new HomeFragment());
             } else if (v == itemScan) {
                 startService(new Intent(Main.this, ScanMusic.class));
             } else if (v == itemTimer) {
-                // changeFragment(new CalendarFragment());
             } else if (v == itemSettings) {
-                // changeFragment(new SettingsFragment());
             } else if (v == itemQuit) {
                 AppManager.getAppManager().AppExit(Main.this);
             }
@@ -304,10 +301,14 @@ public class Main extends BaseActivity {
     public class MusicChangeReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Player.getPlayer().getPlaying() != Config.PLAYING_STOP) {
-                refreshBottomBar();
+            if (Config.RECEIVER_MUSIC_CHANGE.equals(intent.getAction())) {
+                if (Player.getPlayer().getPlaying() != Config.PLAYING_STOP) {
+                    refreshBottomBar();
+                }
+                lyricFragment.refreshLrcView();
+            } else if (Config.RECEIVER_ERROR.endsWith(intent.getAction())) {
+                UIHelper.toast(intent.getStringExtra("error"));
             }
-            lyricFragment.refreshLrcView();
         }
     }
 

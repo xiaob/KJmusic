@@ -4,17 +4,12 @@ import java.io.Serializable;
 
 import net.kymjs.music.utils.StringUtils;
 import net.tsz.afinal.annotation.sqlite.Table;
-import android.os.Bundle;
-import android.os.Parcel;
-import android.os.Parcelable;
 
 /**
  * 本地音乐文件bean类
  */
 @Table(name = "music")
-public class Music implements Parcelable, Serializable {
-    private static final long serialVersionUID = 1L;
-
+public class Music implements Serializable {
     // 设置自定义主键
     // @Id(column = "id")
     private int id;
@@ -25,49 +20,22 @@ public class Music implements Parcelable, Serializable {
     private int collect;
     private String encode;
     private String decode;
-    private String lrcid;
+    private String lrcId;
+    private String lrcUrl;
 
-    public String getEncode() {
-        return encode;
+    public String getLrcId() {
+        return lrcId;
     }
 
-    public String getDecode() {
-        return decode;
-    }
-
-    public String getLrcid() {
-        return lrcid;
-    }
-
-    public Music() {
-        super();
-    }
-
-    public void setEncode(String encode) {
-        this.encode = encode;
-    }
-
-    public void setDecode(String decode) {
-        this.decode = decode;
-    }
-
-    public String getDownUrl() {
-        return this.encode + this.decode;
-    }
-
-    public String getlrcId() {
-        return lrcid;
+    public void setLrcId(String lrcId) {
+        this.lrcId = lrcId;
+        int lrcid = StringUtils.toInt(this.lrcId, 0);
+        lrcUrl = "http://box.zhangmen.baidu.com/bdlrc/" + (lrcid / 100) + "/"
+                + lrcid + ".lrc";
     }
 
     public String getLrcUrl() {
-        int lrcid = StringUtils.toInt(this.lrcid, 0);
-        String url = "http://box.zhangmen.baidu.com/bdlrc/" + (lrcid / 100)
-                + "/" + lrcid + ".lrc";
-        return url;
-    }
-
-    public void setLrcid(String lrcid) {
-        this.lrcid = lrcid;
+        return lrcUrl;
     }
 
     public int getId() {
@@ -76,14 +44,6 @@ public class Music implements Parcelable, Serializable {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getSize() {
-        return size;
-    }
-
-    public void setSize(String size) {
-        this.size = size;
     }
 
     public String getTitle() {
@@ -110,6 +70,14 @@ public class Music implements Parcelable, Serializable {
         this.path = path;
     }
 
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
+    }
+
     public int getCollect() {
         return collect;
     }
@@ -118,49 +86,23 @@ public class Music implements Parcelable, Serializable {
         this.collect = collect;
     }
 
-    // 重载构造函数,供内部类使用
-    private Music(Parcel in) {
-        Bundle bundle = in.readBundle();
-        id = bundle.getInt("id");
-        title = bundle.getString("title");
-        artist = bundle.getString("artist");
-        path = bundle.getString("path");
-        size = bundle.getString("size");
-        collect = bundle.getInt("collect");
-        encode = bundle.getString("encode");
-        decode = bundle.getString("decode");
-        lrcid = bundle.getString("lrcid");
+    public String getEncode() {
+        return encode;
     }
 
-    @Override
-    public int describeContents() {
-        return 0;
+    public void setEncode(String encode) {
+        this.encode = encode;
     }
 
-    @Override
-    public void writeToParcel(Parcel out, int flags) {
-        Bundle bundle = new Bundle();
-        bundle.putInt("id", id);
-        bundle.putString("title", title);
-        bundle.putString("artist", artist);
-        bundle.putString("path", path);
-        bundle.putString("size", size);
-        bundle.putInt("collect", collect);
-        bundle.putString("encode", encode);
-        bundle.putString("decode", decode);
-        bundle.putString("lrcid", lrcid);
-        out.writeBundle(bundle);
+    public String getDecode() {
+        return decode;
     }
 
-    // 创建一个内部类用来读取数据
-    public static final Parcelable.Creator<Music> CREATOR = new Parcelable.Creator<Music>() {
-        public Music createFromParcel(Parcel in) {
-            return new Music(in);
-        }
+    public void setDecode(String decode) {
+        this.decode = decode;
+    }
 
-        @Override
-        public Music[] newArray(int size) {
-            return new Music[size];
-        }
-    };
+    public void setLrcUrl(String lrcUrl) {
+        this.lrcUrl = lrcUrl;
+    }
 }

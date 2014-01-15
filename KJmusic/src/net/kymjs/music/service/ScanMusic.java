@@ -53,7 +53,7 @@ public class ScanMusic extends IntentService {
                 music.setCollect(0);
                 music.setDecode("");
                 music.setEncode("");
-                music.setLrcid("");
+                music.setLrcId("");
                 db.save(music);
                 AppLog.debug("找到音乐：" + music.getTitle());
             }

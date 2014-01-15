@@ -327,7 +327,7 @@ public class LyricFragment extends BaseFragment {
         Music music = mPlayer.getMusic();
         switch (parentView.getId()) {
         case R.id.lrc_main_share:
-            UIHelper.toast("点击了分享按钮");
+            UIHelper.toast("分享功能暂无");
             break;
         case R.id.lrc_main_collect:
             music.setCollect((music.getCollect() + 1) % 2);
@@ -377,7 +377,7 @@ public class LyricFragment extends BaseFragment {
         case R.id.lyric_pager_lrcView:
             // 如果没有歌词
             if (Config.LRC_TEXT.equals(lrcView.getLoadingTipText())) {
-                if (music.getlrcId() != null && music.getlrcId().length() > 2) {
+                if (music.getLrcId() != null && music.getLrcId().length() > 2) {
                     // 如果歌曲信息中已经有路径，则直接下载
                     mDownService.downLrc(music);
                 } else {

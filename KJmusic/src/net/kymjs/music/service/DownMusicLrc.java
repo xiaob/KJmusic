@@ -53,8 +53,8 @@ public class DownMusicLrc extends Service {
                         @Override
                         public void onSuccess(File t) {
                             super.onSuccess(t);
-                            AppLog.debug("数据下载：---onSuccess-----"
-                                    + t.toString());
+                            AppLog.debug(getClass() + "数据下载：---onSuccess-----"
+                                    + t.getAbsolutePath());
                             Intent intent = new Intent(
                                     Config.RECEIVER_DOWNLOAD_LYRIC);
                             sendBroadcast(intent);

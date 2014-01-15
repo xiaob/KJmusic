@@ -77,18 +77,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="20dp"
                     android:layout_below="@+id/lrc_hidemenu_img_search"
-                    android:text="搜索词图" />
+                    android:text="搜索歌词" />
             </RelativeLayout>
         </LinearLayout>
-
-        <SeekBar
-            android:id="@+id/lrc_hidemenu_seekbar"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_below="@+id/lrc_menu"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:thumb="@drawable/progress_dot_default" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -104,21 +95,18 @@
             android:layout_alignParentLeft="true"
             android:layout_marginBottom="25dp"
             android:layout_marginLeft="15dp"
-            android:lines="1"
-            android:text="金莎"
             android:textColor="@android:color/white"
             android:textSize="12sp" />
 
         <TextView
             android:id="@+id/lrc_main_title"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
             android:layout_above="@+id/lrc_main_artist"
             android:layout_alignLeft="@+id/lrc_main_artist"
             android:layout_marginBottom="2dp"
-            android:lines="1"
-            android:text="金莎的歌"
             android:textColor="@android:color/white"
+            android:singleLine="true"
             android:textSize="22sp" />
 
         <Button

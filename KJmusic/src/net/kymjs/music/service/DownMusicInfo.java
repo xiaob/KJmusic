@@ -9,12 +9,10 @@ import net.kymjs.music.AppLog;
 import net.kymjs.music.Config;
 import net.kymjs.music.bean.Music;
 import net.kymjs.music.parser.ParserMusicXML;
-import net.kymjs.music.utils.UIHelper;
-import net.tsz.afinal.FinalDb;
+import net.kymjs.music.utils.ErrHandleUtils;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -59,17 +57,18 @@ public class DownMusicInfo extends IntentService {
                 CoreProtocolPNames.HTTP_CONTENT_CHARSET, "utf-8");
 
         String url = "http://box.zhangmen.baidu.com/x?op=12&count=1&title="
-                + music.getTitle().replace(" ", "") + "$$"
-                + music.getArtist().replace(" ", "") + "$$$$";
+                + music.getTitle().replaceAll(" ", "") + "$$"
+                + music.getArtist().replaceAll(" ", "") + "$$$$";
         // try {
         // url = urlEncode(url.trim(), "utf-8");
         // } catch (UnsupportedEncodingException e2) {
         // e2.printStackTrace();
         // }
         url = url.trim();
-        HttpGet get = new HttpGet(url);
+        AppLog.kymjs("这是链接地址：" + url);
         BufferedReader br = null;
         try {
+            HttpGet get = new HttpGet(url);
             HttpResponse response = httpClient.execute(get);
             HttpEntity entity = response.getEntity();
             if (entity != null) {
@@ -80,10 +79,12 @@ public class DownMusicInfo extends IntentService {
                     xml.append(line);
                 }
             }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
         } catch (IOException e) {
-            e.printStackTrace();
+            ErrHandleUtils.sendErrInfo(this, "歌曲信息下载失败...");
+            return;
+        } catch (Exception e) {
+            ErrHandleUtils.sendErrInfo(this, "没找到歌曲信息，试试手动搜索吧");
+            return;
         } finally {
             if (br != null) {
                 try {
@@ -96,16 +97,13 @@ public class DownMusicInfo extends IntentService {
         // 数据获取到，开始解析
         AppLog.kymjs(getClass() + "-------网络请求：" + xml.toString());
         music = ParserMusicXML.ParserMusic(music, xml.toString());
-        if ("0000".equals(music.getlrcId())) {
-            UIHelper.toast(this, "歌词没有找到");
+        if ("0000".equals(music.getLrcId())) {
+            ErrHandleUtils.sendErrInfo(this, "没找到歌曲信息，试试手动搜索吧");
         } else {
             // 下载完成，发送广播
             Intent downxml = new Intent(Config.RECEIVER_DOWNLOAD_XML);
             downxml.putExtra("music", (Serializable) music);
             sendBroadcast(downxml);
-            // 更新数据库中数据
-            FinalDb db = FinalDb.create(this);
-            db.update(music, "id = '" + music.getId() + "'");
         }
     }
 }

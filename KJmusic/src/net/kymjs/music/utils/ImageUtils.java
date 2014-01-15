@@ -43,14 +43,14 @@ public class ImageUtils {
             public void onSuccess(String t) {
                 super.onSuccess(t);
                 FinalBitmap fb = FinalBitmap.create(context);
-                String u = ParserMusicXML.ParserMusicImg(t, i);
+                String u = ParserMusicXML.ParserMusicImg(context, t, i);
                 fb.display(iv, u);
             }
         });
     }
 
     /**
-     * 获取播放按钮背景
+     * 获取歌词界面播放按钮背景
      */
     public static int getBtnPlayBg() {
         int background = 0;
@@ -58,6 +58,19 @@ public class ImageUtils {
             background = R.drawable.selector_radio_pause;
         } else {
             background = R.drawable.selector_radio_play;
+        }
+        return background;
+    }
+
+    /**
+     * 获取歌曲界面播放按钮背景
+     */
+    public static int getBtnMusicPlayBg() {
+        int background = 0;
+        if (Player.getPlayer().getPlaying() == Config.PLAYING_PLAY) {
+            background = R.drawable.selector_btn_pause;
+        } else {
+            background = R.drawable.selector_btn_play;
         }
         return background;
     }

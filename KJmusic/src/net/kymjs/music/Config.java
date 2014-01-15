@@ -9,7 +9,7 @@ public class Config {
     public static final String ARTIST = "kymJS";
 
     /** 数据库名字 */
-    public static final String DB_NAME = "kymjsmusicdb";
+    public static final String DB_NAME = "kymjs_music_db";
     /** 是否启动调试模式 */
     public static final boolean isDebug = true;
 
@@ -47,6 +47,9 @@ public class Config {
     /** 下载歌词的广播 */
     public static final String RECEIVER_DOWNLOAD_LYRIC = "net.kymjs.music.download.lyric";
 
+    /** 由于在intentService中无法显示toast */
+    public static final String RECEIVER_ERROR = "net.kymjs.music.error";
+    
     /** 更换图片 */
     public static final String CHANGE_IMG_FILE = "change_img";
     public static final String CHANGE_IMG_KEY = "change_img";

@@ -2,7 +2,8 @@ package net.kymjs.music.parser;
 
 import net.kymjs.music.AppLog;
 import net.kymjs.music.bean.Music;
-import net.kymjs.music.utils.UIHelper;
+import net.kymjs.music.utils.ErrHandleUtils;
+import android.content.Context;
 
 public class ParserMusicXML {
     public static Music ParserMusic(Music music, String xml) {
@@ -36,31 +37,29 @@ public class ParserMusicXML {
             music.setEncode(encode);
             decode = decode.substring(9, decode.length() - 3);
             music.setDecode(decode);
-            music.setLrcid(lrcid);
+            music.setLrcId(lrcid);
         } catch (Exception e) {
             AppLog.debug("xml字串异常，无法解析");
-            music.setLrcid("0000");
+            music.setLrcId("0000");
             return music;
         }
         return music;
     }
 
     // http://image.baidu.com/i?tn=baiduimagejson&ie=utf-8&ic=0&rn=20&pn=1&word=
-    public static String ParserMusicImg(String xml, int i) {
+    public static String ParserMusicImg(Context context,String xml, int i) {
         String imgUrl = xml;
         for (int count = 0; count <= i; count++) {
-            if ("没有图片".equals(imgUrl)) {
-                break;
-            }
             int begin = 0, end = 0;
-            begin = imgUrl.indexOf("\"objURL\":\"") + 10;
-            end = imgUrl.indexOf("\"", begin);
+            begin = xml.indexOf("\"objURL\":\"") + 10;
+            end = xml.indexOf("\"", begin);
             if (begin < 0 || end < 0) {
-                imgUrl = "没有图片";
-                UIHelper.toast("没有更多图片了");
+                ErrHandleUtils.sendErrInfo(context, "没有更多图片了");
+                break;
             } else {
                 imgUrl = xml.substring(begin, end);
             }
+            xml = xml.substring(end);
         }
         return imgUrl;
     }
