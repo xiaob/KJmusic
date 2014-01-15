@@ -53,8 +53,8 @@ public class AppStart extends FinalActivity {
      */
     private void redirectTo() {
         Intent intent = new Intent();
+        // if (firstsInstall()) {
         if (true) {
-            // if (firstsInstall()) {
             intent.setClass(this, FirstInstallActivity.class);
         } else {
             intent.setClass(this, Main.class);
