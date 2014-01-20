@@ -85,7 +85,6 @@ public class LyricFragment extends BaseFragment {
     private ImageView mImgNext;
     private ImageView mImgLoop;
     private ImageView mImgMenu;
-    private int loopMode;
     private String[] loopModeStr = { "单曲播放", "单曲循环", "列表播放", "随机播放" };
 
     // 播放列表部分
@@ -265,9 +264,7 @@ public class LyricFragment extends BaseFragment {
         mImgNext.setOnClickListener(this);
 
         mImgLoop = (ImageView) parentView.findViewById(R.id.lrc_btn_loop);
-        mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity(),
-                loopMode));
-        mPlayer.setMode(loopMode);
+        mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity()));
         mImgLoop.setOnClickListener(this);
 
         mImgMenu = (ImageView) parentView.findViewById(R.id.lrc_btn_menu);
@@ -362,12 +359,13 @@ public class LyricFragment extends BaseFragment {
             ((Main) getActivity()).mPlayersService.next();
             break;
         case R.id.lrc_btn_loop:
+            int curLoop = PreferenceHelper.readInt(getActivity(),
+                    Config.LOOP_MODE_FILE, Config.LOOP_MODE_KEY,
+                    Config.MODE_REPEAT_ALL);
             PreferenceHelper.write(getActivity(), Config.LOOP_MODE_FILE,
-                    Config.LOOP_MODE_KEY, loopMode = (loopMode + 1) % 4);
-            mPlayer.setMode(loopMode);
-            mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity(),
-                    loopMode));
-            UIHelper.toast(loopModeStr[loopMode]);
+                    Config.LOOP_MODE_KEY, (curLoop + 1) % 4);
+            mImgLoop.setImageResource(ImageUtils.getImgLoopBg(getActivity()));
+            UIHelper.toast(loopModeStr[(curLoop + 1) % 4]);
             break;
         case R.id.lrc_btn_menu:
             UIHelper.toast("正在更换歌曲图片");

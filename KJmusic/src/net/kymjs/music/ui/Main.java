@@ -321,8 +321,11 @@ public class Main extends BaseActivity {
             if (isOpen) {
                 wantScroll();
             } else {
-                AppManager.getAppManager().AppExit(this);
+                // AppManager.getAppManager().AppExit(this);
+                moveTaskToBack(false);
             }
+        } else {
+            super.onKeyDown(keyCode, event);
         }
         return true;
     }

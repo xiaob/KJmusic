@@ -91,8 +91,8 @@ public class ImageUtils {
     /**
      * 获取循环播放控件背景
      */
-    public static int getImgLoopBg(Context context, int loopMode) {
-        loopMode = PreferenceHelper.readInt(context, Config.LOOP_MODE_FILE,
+    public static int getImgLoopBg(Context context) {
+        int loopMode = PreferenceHelper.readInt(context, Config.LOOP_MODE_FILE,
                 Config.LOOP_MODE_KEY, Config.MODE_REPEAT_ALL);
         Player.getPlayer().setMode(loopMode);
         return loopModes[loopMode];

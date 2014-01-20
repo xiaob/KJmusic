@@ -146,6 +146,13 @@ public class TabLayout extends ViewGroup {
         }
     }
 
+    public void computeScroll(View v) {
+        if (mScroller.computeScrollOffset()) {
+            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            postInvalidate();
+        }
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (!isScroll) {
@@ -250,5 +257,16 @@ public class TabLayout extends ViewGroup {
      */
     public interface OnViewChangeListener {
         public void OnViewChange(int view);
+    }
+
+    private void setBG(int a) {
+        a *= 0x1000000;
+        if (a > 190) {
+            a = 190;
+        }
+        if (a < 0) {
+            a = 0;
+        }
+        this.setBackgroundColor(a);
     }
 }
