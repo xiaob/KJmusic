@@ -1,5 +1,6 @@
 package net.kymjs.music.ui.widget;
 
+import net.kymjs.music.AppLog;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
@@ -140,15 +141,9 @@ public class TabLayout extends ViewGroup {
 
     @Override
     public void computeScroll() {
+        int currentX = mScroller.getCurrX();
         if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
-            postInvalidate();
-        }
-    }
-
-    public void computeScroll(View v) {
-        if (mScroller.computeScrollOffset()) {
-            scrollTo(mScroller.getCurrX(), mScroller.getCurrY());
+            scrollTo(currentX, mScroller.getCurrY());
             postInvalidate();
         }
     }
@@ -181,6 +176,8 @@ public class TabLayout extends ViewGroup {
             mLastMotionY = y;
             mLastMotionX = x;
             scrollBy(deltaX, 0);
+            AppLog.kymjs(getClass() + "-----  " + deltaX + "-------"
+                    + getWidth() * (getChildCount() - 1));
             break;
         case MotionEvent.ACTION_UP:
             final VelocityTracker velocityTracker = mVelocityTracker;
@@ -257,16 +254,5 @@ public class TabLayout extends ViewGroup {
      */
     public interface OnViewChangeListener {
         public void OnViewChange(int view);
-    }
-
-    private void setBG(int a) {
-        a *= 0x1000000;
-        if (a > 190) {
-            a = 190;
-        }
-        if (a < 0) {
-            a = 0;
-        }
-        this.setBackgroundColor(a);
     }
 }

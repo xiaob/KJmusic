@@ -11,9 +11,10 @@
         android:id="@+id/lrc_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="70dp"
+        android:layout_marginBottom="81dp"
+        android:layout_marginTop="52dp"
         android:alpha="77"
-        android:padding="5dp"
+        android:padding="10dp"
         android:scaleType="fitCenter" />
     <!-- 顶部的小点点 -->
 

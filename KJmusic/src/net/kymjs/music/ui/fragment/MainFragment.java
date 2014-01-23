@@ -4,6 +4,7 @@ import net.kymjs.music.Config;
 import net.kymjs.music.R;
 import net.kymjs.music.adapter.AbsPlayListAdapter;
 import net.kymjs.music.adapter.CollectListAdapter;
+import net.kymjs.music.adapter.FMPagerAdapter;
 import net.kymjs.music.adapter.MyMusicAdapter;
 import net.kymjs.music.ui.Main;
 import net.kymjs.music.ui.widget.JSViewPager;
@@ -28,6 +29,7 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -69,7 +71,7 @@ public class MainFragment extends BaseFragment {
         mTextTab3 = (TextView) parentView.findViewById(R.id.collect_title3);
         mTextTab1.setText("本地音乐");
         mTextTab2.setText("我的收藏");
-        mTextTab3.setText("在线音乐");
+        mTextTab3.setText("音乐电台");
         mTextTab1.setOnClickListener(this);
         mTextTab2.setOnClickListener(this);
         mTextTab3.setOnClickListener(this);
@@ -250,35 +252,45 @@ public class MainFragment extends BaseFragment {
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            ListView list = getListView(position);
-            if (list == null) {
-                list = (ListView) View.inflate(getActivity(),
+            View mainPagerView = getPagerView(position);
+            if (mainPagerView == null) {
+                mainPagerView = (ListView) View.inflate(getActivity(),
                         R.layout.pager_item_main, null);
             }
-            list.setOnItemClickListener(this);
-            (container).addView(list);
-            return list;
+            (container).addView(mainPagerView);
+            return mainPagerView;
         }
 
         // 对不同的界面设置不同的适配器
-        private ListView getListView(int pager) {
-            ListView list = null;
+        private View getPagerView(int pager) {
+            View pagerView = null;
             switch (pager) {
             case 0:
                 mMyMusicList = (ListView) View.inflate(getActivity(),
                         R.layout.pager_item_main, null);
                 myMusicAdp = new MyMusicAdapter(getActivity(), pager);
                 mMyMusicList.setAdapter(myMusicAdp);
-                list = mMyMusicList;
+                mMyMusicList.setOnItemClickListener(this);
+                pagerView = mMyMusicList;
                 break;
             case 1:
                 mCollectList = (ListView) View.inflate(getActivity(),
                         R.layout.pager_item_main, null);
                 collectAdp = new CollectListAdapter(getActivity(), pager);
                 mCollectList.setAdapter(collectAdp);
-                list = mCollectList;
+                mCollectList.setOnItemClickListener(this);
+                pagerView = mCollectList;
+                break;
+            case 2:
+                View fmView = View.inflate(getActivity(),
+                        R.layout.pager_item_main_fm, null);
+                GridView grid = (GridView) fmView
+                        .findViewById(R.id.pager_grid_fm);
+                grid.setAdapter(new FMPagerAdapter());
+                pagerView = fmView;
+                break;
             }
-            return list;
+            return pagerView;
         }
 
         @Override
@@ -293,8 +305,6 @@ public class MainFragment extends BaseFragment {
             case 1:
                 ((Main) getActivity()).mPlayersService.play(
                         ListData.getCollectList(getActivity()), position);
-                break;
-            case 2:
                 break;
             }
             ((Main) getActivity()).wantScroll((Main) getActivity());
