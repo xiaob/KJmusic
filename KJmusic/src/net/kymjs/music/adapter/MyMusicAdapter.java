@@ -69,7 +69,7 @@ public class MyMusicAdapter extends AbsPlayListAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder;
+        final ViewHolder holder;
         if (convertView == null) {
             convertView = View
                     .inflate(mContext, R.layout.list_item_music, null);
@@ -80,30 +80,10 @@ public class MyMusicAdapter extends AbsPlayListAdapter {
                     .findViewById(R.id.list_item_artist);
             holder.img_collect = (ImageView) convertView
                     .findViewById(R.id.list_img_button);
-            holder.img_collect.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    FinalDb db = FinalDb.create(mContext, Config.DB_NAME,
-                            Config.isDebug);
-                    Music music = datas.get(position);
-                    if (isCollect(position)) {
-                        music.setCollect(0);
-                        ((ImageView) v)
-                                .setImageResource(R.drawable.selector_adp_notcollect);
-                    } else {
-                        music.setCollect(1);
-                        ((ImageView) v)
-                                .setImageResource(R.drawable.selector_adp_collect);
-                    }
-                    db.update(music, "id = '" + music.getId() + "'");
-                    Config.changeCollectInfo = true;
-                }
-            });
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.img_collect.setTag(position);
         holder.tv_title.setText(datas.get(position).getTitle());
         holder.tv_artist.setText(datas.get(position).getArtist());
         if (isCollect(position)) {
@@ -113,6 +93,26 @@ public class MyMusicAdapter extends AbsPlayListAdapter {
             holder.img_collect
                     .setImageResource(R.drawable.selector_adp_notcollect);
         }
+        // 点击切换收藏图片，并更新数据库
+        holder.img_collect.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FinalDb db = FinalDb.create(mContext, Config.DB_NAME,
+                        Config.isDebug);
+                Music music = datas.get(position);
+                if (isCollect(position)) {
+                    music.setCollect(0);
+                    ((ImageView) v)
+                            .setImageResource(R.drawable.selector_adp_notcollect);
+                } else {
+                    music.setCollect(1);
+                    ((ImageView) v)
+                            .setImageResource(R.drawable.selector_adp_collect);
+                }
+                db.update(music, "id = '" + music.getId() + "'");
+                Config.changeCollectInfo = true;
+            }
+        });
         return convertView;
     }
 
