@@ -3,6 +3,5 @@
     android:id="@+id/lrc_pager_list"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:divider="#a9a9a9"
     android:listSelector="#a9a9a9"
     android:overScrollMode="never" />

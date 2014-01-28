@@ -87,15 +87,18 @@ public class LrcListAdapter extends BaseAdapter {
         }
         holder.tv_title.setText(datas.get(position).getTitle());
         holder.tv_artist.setText(datas.get(position).getArtist());
-        if (Player.getPlayer().getListPosition() == position) {
+        if (Player.getPlayer().getMusic().getId() == datas.get(position)
+                .getId()) {
             if (imgUrl != null) {
+                holder.img.setVisibility(View.VISIBLE);
                 FinalBitmap fb = FinalBitmap.create(context);
                 fb.display(holder.img, imgUrl);
             } else {
-                holder.img.setImageResource(R.drawable.adp_collect_click);
+                holder.img.setImageResource(R.drawable.img_playing);
+                holder.img.setVisibility(View.VISIBLE);
             }
         } else {
-            holder.img.setImageBitmap(null);
+            holder.img.setVisibility(View.GONE);
         }
         return v;
     }
