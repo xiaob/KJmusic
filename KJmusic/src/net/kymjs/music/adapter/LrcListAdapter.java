@@ -7,6 +7,7 @@ import net.kymjs.music.R;
 import net.kymjs.music.bean.Music;
 import net.kymjs.music.utils.ListData;
 import net.kymjs.music.utils.Player;
+import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ public class LrcListAdapter extends BaseAdapter {
 
     private Context context;
     private List<Music> datas;
+    private String imgUrl;
 
     public LrcListAdapter(Context context) {
         super();
@@ -42,6 +44,11 @@ public class LrcListAdapter extends BaseAdapter {
             datas = new ArrayList<Music>();
         }
         notifyDataSetChanged();
+    }
+
+    public void refreshLrcAdapter(String url) {
+        this.imgUrl = url;
+        this.refreshLrcAdapter();
     }
 
     @Override
@@ -80,7 +87,16 @@ public class LrcListAdapter extends BaseAdapter {
         }
         holder.tv_title.setText(datas.get(position).getTitle());
         holder.tv_artist.setText(datas.get(position).getArtist());
-        holder.img.setImageResource(R.drawable.adp_collect_click);
+        if (Player.getPlayer().getListPosition() == position) {
+            if (imgUrl != null) {
+                FinalBitmap fb = FinalBitmap.create(context);
+                fb.display(holder.img, imgUrl);
+            } else {
+                holder.img.setImageResource(R.drawable.adp_collect_click);
+            }
+        } else {
+            holder.img.setImageBitmap(null);
+        }
         return v;
     }
 

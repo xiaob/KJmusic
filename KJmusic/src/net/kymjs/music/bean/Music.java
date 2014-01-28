@@ -22,6 +22,15 @@ public class Music implements Serializable {
     private String decode;
     private String lrcId;
     private String lrcUrl;
+    private String imgUrl;
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
+    }
 
     public String getLrcId() {
         return lrcId;
