@@ -16,6 +16,7 @@ import android.provider.MediaStore;
  * @author kymjs
  */
 public class ScanMusic extends IntentService {
+    private int count;
 
     public ScanMusic() {
         super("net.kymjs.music.service.LoadRes");
@@ -55,6 +56,7 @@ public class ScanMusic extends IntentService {
                 music.setEncode("");
                 music.setLrcId("");
                 db.save(music);
+                count++;
                 AppLog.debug("找到音乐：" + music.getTitle());
             }
             result = true;
@@ -68,6 +70,7 @@ public class ScanMusic extends IntentService {
         String action = result ? Config.RECEIVER_MUSIC_SCAN_SUCCESS
                 : Config.RECEIVER_MUSIC_SCAN_FAIL;
         musicScan.setAction(action);
+        musicScan.putExtra(Config.SCAN_MUSIC_COUNT, count);
         sendBroadcast(musicScan);
     }
 }

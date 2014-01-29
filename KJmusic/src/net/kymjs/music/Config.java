@@ -57,4 +57,7 @@ public class Config {
     /** 更换图片 */
     public static final String CHANGE_IMG_FILE = "change_img";
     public static final String CHANGE_IMG_KEY = "change_img";
+
+    /** 扫描到的歌曲数量 */
+    public static final String SCAN_MUSIC_COUNT = "SCAN_MUSIC_COUNT";
 }

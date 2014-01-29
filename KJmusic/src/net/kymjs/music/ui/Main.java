@@ -4,7 +4,6 @@ import net.kymjs.music.AppManager;
 import net.kymjs.music.Config;
 import net.kymjs.music.R;
 import net.kymjs.music.service.PlayerService;
-import net.kymjs.music.service.ScanMusic;
 import net.kymjs.music.ui.fragment.LyricFragment;
 import net.kymjs.music.ui.fragment.MainFragment;
 import net.kymjs.music.ui.widget.ResideMenu;
@@ -220,7 +219,8 @@ public class Main extends BaseActivity {
         public void onClick(View v) {
             if (v == itemDown) {
             } else if (v == itemScan) {
-                startService(new Intent(Main.this, ScanMusic.class));
+                // startService(new Intent(Main.this, ScanMusic.class));
+                startActivity(new Intent(Main.this, FirstInstallActivity.class));
             } else if (v == itemTimer) {
             } else if (v == itemSettings) {
             } else if (v == itemQuit) {
