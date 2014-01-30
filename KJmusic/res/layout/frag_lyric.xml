@@ -104,7 +104,7 @@
 
     <!-- 歌词界面内容部分 -->
 
-    <net.kymjs.music.ui.widget.TabLayout
+    <org.kymjs.music.ui.widget.TabLayout
         android:id="@+id/lrc_tablayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -116,7 +116,7 @@
         <include layout="@layout/frag_lyric_main" />
 
         <include layout="@layout/frag_lyric_lrc" />
-    </net.kymjs.music.ui.widget.TabLayout>
+    </org.kymjs.music.ui.widget.TabLayout>
 
     <!-- 歌曲播放进度条 -->
 

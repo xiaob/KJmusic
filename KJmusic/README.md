@@ -34,34 +34,34 @@ GPLV2协议说明：GPL协议的主要内容是只要在一个软件中使用(�
 
 下面是src目录的子目录（未来可能变更）：<br>
 	> src<br>
-	> ├ net.kymjs.music<br>
-	> ├ net.kymjs.music.ui<br>
-	> ├ net.kymjs.music.ui.fragment<br>
-	> ├ net.kymjs.music.ui.widget<br>
-	> ├ net.kymjs.music.adapter<br>
-	> ├ net.kymjs.music.utils<br>
-	> ├ net.kymjs.music.bean<br>
-	> ├ net.kymjs.music.service<br>
-	> ├ net.kymjs.music.db<br>
-	> └ net.kymjs.music.resolve<br>
-	> └ net.kymjs.music.receiver<br>
+	> ├ org.kymjs.music<br>
+	> ├ org.kymjs.music.ui<br>
+	> ├ org.kymjs.music.ui.fragment<br>
+	> ├ org.kymjs.music.ui.widget<br>
+	> ├ org.kymjs.music.adapter<br>
+	> ├ org.kymjs.music.utils<br>
+	> ├ org.kymjs.music.bean<br>
+	> ├ org.kymjs.music.service<br>
+	> ├ org.kymjs.music.db<br>
+	> └ org.kymjs.music.resolve<br>
+	> └ org.kymjs.music.receiver<br>
 	
-	net.kymjs.music	- APP启动及管理包
-	net.kymjs.music.ui - APP界面包
-	net.kymjs.music.ui.fragment - APP碎片界面
-	net.kymjs.music.ui.widget - APP自定义控件
-	net.kymjs.music.adapter - APP适配器包
-	net.kymjs.music.util - APP工具包，帮助类
-	net.kymjs.music.bean - APP实体类包
-	net.kymjs.music.service - APP所需服务
-	net.kymjs.music.db - APP数据库相关
-	net.kymjs.music.resolve - APP网络数据解析器
-	net.kymjs.music.inter - 所需接口包
-	net.kymjs.music.receiver - 接收全局广播
+	org.kymjs.music	- APP启动及管理包
+	org.kymjs.music.ui - APP界面包
+	org.kymjs.music.ui.fragment - APP碎片界面
+	org.kymjs.music.ui.widget - APP自定义控件
+	org.kymjs.music.adapter - APP适配器包
+	org.kymjs.music.util - APP工具包，帮助类
+	org.kymjs.music.bean - APP实体类包
+	org.kymjs.music.service - APP所需服务
+	org.kymjs.music.db - APP数据库相关
+	org.kymjs.music.resolve - APP网络数据解析器
+	org.kymjs.music.inter - 所需接口包
+	org.kymjs.music.receiver - 接收全局广播
 	
 ## **二、项目的功能流程** ##
 #### 1、APP启动流程 ####
-	应用首次启动，将跳转至net.kymjs.music包下的AppStart，在载入动画和资源的同时判断是否为首次安装程序，之后跳转到相应的Activity（欢迎界面Welcome或主界面Main）。<br>
+	应用首次启动，将跳转至org.kymjs.music包下的AppStart，在载入动画和资源的同时判断是否为首次安装程序，之后跳转到相应的Activity（欢迎界面Welcome或主界面Main）。<br>
 
 #### 2、APP访问API流程 ####
 	**1) 初始化控件**<br>

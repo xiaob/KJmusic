@@ -39,7 +39,7 @@
 
     <!-- 中间的内容 -->
 
-    <net.kymjs.music.ui.widget.JSViewPager
+    <org.kymjs.music.ui.widget.JSViewPager
         android:id="@+id/main_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
