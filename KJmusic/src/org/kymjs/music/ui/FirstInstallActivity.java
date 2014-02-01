@@ -1,14 +1,15 @@
 package org.kymjs.music.ui;
 
+import net.tsz.afinal.annotation.view.ViewInject;
+
 import org.kymjs.music.AppManager;
 import org.kymjs.music.Config;
+import org.kymjs.music.R;
 import org.kymjs.music.service.ScanMusic;
 import org.kymjs.music.ui.widget.ScrollLayout;
 import org.kymjs.music.ui.widget.ScrollLayout.OnViewChangeListener;
 import org.kymjs.music.utils.PreferenceHelper;
 
-import net.kymjs.music.R;
-import net.tsz.afinal.annotation.view.ViewInject;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

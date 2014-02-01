@@ -3,13 +3,14 @@ package org.kymjs.music.utils;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
-import org.kymjs.music.Config;
-import org.kymjs.music.parser.ParserMusicXML;
-
-import net.kymjs.music.R;
 import net.tsz.afinal.FinalBitmap;
 import net.tsz.afinal.FinalHttp;
 import net.tsz.afinal.http.AjaxCallBack;
+
+import org.kymjs.music.Config;
+import org.kymjs.music.R;
+import org.kymjs.music.parser.ParserMusicXML;
+
 import android.content.Context;
 import android.widget.ImageView;
 

@@ -1,6 +1,7 @@
 package org.kymjs.music.ui.widget;
 
-import net.kymjs.music.R;
+import org.kymjs.music.R;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.widget.ImageView;

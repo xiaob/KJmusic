@@ -1,6 +1,7 @@
 package org.kymjs.music.ui.fragment;
 
 import org.kymjs.music.Config;
+import org.kymjs.music.R;
 import org.kymjs.music.adapter.AbsPlayListAdapter;
 import org.kymjs.music.adapter.CollectListAdapter;
 import org.kymjs.music.adapter.FMPagerAdapter;
@@ -11,7 +12,6 @@ import org.kymjs.music.ui.widget.ResideMenu;
 import org.kymjs.music.utils.ListData;
 import org.kymjs.music.utils.UIHelper;
 
-import net.kymjs.music.R;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

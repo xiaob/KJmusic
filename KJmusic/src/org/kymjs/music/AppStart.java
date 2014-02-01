@@ -1,13 +1,13 @@
 package org.kymjs.music;
 
+import net.tsz.afinal.FinalActivity;
+import net.tsz.afinal.annotation.view.ViewInject;
+
 import org.kymjs.music.service.ScanMusic;
 import org.kymjs.music.ui.FirstInstallActivity;
 import org.kymjs.music.ui.Main;
 import org.kymjs.music.utils.PreferenceHelper;
 
-import net.kymjs.music.R;
-import net.tsz.afinal.FinalActivity;
-import net.tsz.afinal.annotation.view.ViewInject;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;

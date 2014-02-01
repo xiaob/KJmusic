@@ -3,11 +3,11 @@ package org.kymjs.music.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kymjs.music.R;
 import org.kymjs.music.bean.Music;
 import org.kymjs.music.ui.widget.DensityUtils;
 import org.kymjs.music.utils.ListData;
 
-import net.kymjs.music.R;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

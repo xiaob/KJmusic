@@ -3,12 +3,13 @@ package org.kymjs.music.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.tsz.afinal.FinalDb;
+
 import org.kymjs.music.Config;
+import org.kymjs.music.R;
 import org.kymjs.music.bean.Music;
 import org.kymjs.music.utils.ListData;
 
-import net.kymjs.music.R;
-import net.tsz.afinal.FinalDb;
 import android.content.Context;
 import android.view.View;
 import android.view.View.OnClickListener;

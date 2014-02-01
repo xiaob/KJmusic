@@ -3,12 +3,13 @@ package org.kymjs.music.adapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.tsz.afinal.FinalBitmap;
+
+import org.kymjs.music.R;
 import org.kymjs.music.bean.Music;
 import org.kymjs.music.utils.ListData;
 import org.kymjs.music.utils.Player;
 
-import net.kymjs.music.R;
-import net.tsz.afinal.FinalBitmap;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;

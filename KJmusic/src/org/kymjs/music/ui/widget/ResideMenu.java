@@ -3,7 +3,8 @@ package org.kymjs.music.ui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.kymjs.music.R;
+import org.kymjs.music.R;
+
 import android.animation.Animator;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;

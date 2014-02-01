@@ -2,8 +2,11 @@ package org.kymjs.music.ui.fragment;
 
 import java.io.Serializable;
 
+import net.tsz.afinal.FinalDb;
+
 import org.kymjs.music.AppLog;
 import org.kymjs.music.Config;
+import org.kymjs.music.R;
 import org.kymjs.music.adapter.LrcListAdapter;
 import org.kymjs.music.bean.Music;
 import org.kymjs.music.service.DownMusicInfo;
@@ -18,8 +21,6 @@ import org.kymjs.music.utils.Player;
 import org.kymjs.music.utils.PreferenceHelper;
 import org.kymjs.music.utils.UIHelper;
 
-import net.kymjs.music.R;
-import net.tsz.afinal.FinalDb;
 import android.annotation.SuppressLint;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;

@@ -2,6 +2,7 @@ package org.kymjs.music.ui;
 
 import org.kymjs.music.AppManager;
 import org.kymjs.music.Config;
+import org.kymjs.music.R;
 import org.kymjs.music.service.PlayerService;
 import org.kymjs.music.ui.fragment.LyricFragment;
 import org.kymjs.music.ui.fragment.MainFragment;
@@ -11,7 +12,6 @@ import org.kymjs.music.utils.ImageUtils;
 import org.kymjs.music.utils.Player;
 import org.kymjs.music.utils.UIHelper;
 
-import net.kymjs.music.R;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
