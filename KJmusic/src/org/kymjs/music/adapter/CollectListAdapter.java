@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.kymjs.music.R;
 import org.kymjs.music.bean.Music;
-import org.kymjs.music.ui.widget.DensityUtils;
+import org.kymjs.music.utils.DensityUtils;
 import org.kymjs.music.utils.ListData;
 
 import android.content.Context;

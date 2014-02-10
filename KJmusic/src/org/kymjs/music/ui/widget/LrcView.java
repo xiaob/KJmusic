@@ -3,6 +3,7 @@ package org.kymjs.music.ui.widget;
 import java.util.List;
 
 import org.kymjs.music.Config;
+import org.kymjs.music.utils.DensityUtils;
 import org.kymjs.music.utils.Player;
 
 import android.content.Context;

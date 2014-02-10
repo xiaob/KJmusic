@@ -1,4 +1,4 @@
-package org.kymjs.music.ui.widget;
+package org.kymjs.music.utils;
 
 import android.content.Context;
 
