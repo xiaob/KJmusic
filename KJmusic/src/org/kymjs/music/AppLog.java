@@ -33,7 +33,7 @@ public class AppLog {
 
     public static final void state(Class cls, String state) {
         if (SHOW_ACTIVITY_STATE) {
-            Log.d("state", cls+state);
+            Log.d("state", cls + state);
         }
     }
 }

@@ -1,10 +1,11 @@
 package org.kymjs.music.service;
 
+import net.tsz.afinal.FinalDb;
+
 import org.kymjs.music.AppLog;
 import org.kymjs.music.Config;
 import org.kymjs.music.bean.Music;
 
-import net.tsz.afinal.FinalDb;
 import android.app.IntentService;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -20,7 +21,7 @@ public class ScanMusic extends IntentService {
     private int count;
 
     public ScanMusic() {
-        super("net.kymjs.music.service.LoadRes");
+        super("org.kymjs.music.service.ScanMusic");
     }
 
     @Override

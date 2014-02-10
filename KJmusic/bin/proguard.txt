@@ -1,0 +1,42 @@
+# view AndroidManifest.xml #generated:16
+-keep class org.kymjs.music.AppContext { <init>(...); }
+
+# view AndroidManifest.xml #generated:22
+-keep class org.kymjs.music.AppStart { <init>(...); }
+
+# view AndroidManifest.xml #generated:38
+-keep class org.kymjs.music.service.DownMusicInfo { <init>(...); }
+
+# view AndroidManifest.xml #generated:39
+-keep class org.kymjs.music.service.DownMusicLrc { <init>(...); }
+
+# view AndroidManifest.xml #generated:37
+-keep class org.kymjs.music.service.PlayerService { <init>(...); }
+
+# view AndroidManifest.xml #generated:36
+-keep class org.kymjs.music.service.ScanMusic { <init>(...); }
+
+# view AndroidManifest.xml #generated:34
+-keep class org.kymjs.music.ui.FMActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:33
+-keep class org.kymjs.music.ui.FirstInstallActivity { <init>(...); }
+
+# view AndroidManifest.xml #generated:32
+-keep class org.kymjs.music.ui.Main { <init>(...); }
+
+# view res/layout/frag_main.xml #generated:42
+-keep class org.kymjs.music.ui.widget.JSViewPager { <init>(...); }
+
+# view res/layout/frag_lyric_lrc.xml #generated:2
+-keep class org.kymjs.music.ui.widget.LrcView { <init>(...); }
+
+# view res/layout/pager_item_main_fm.xml #generated:44
+-keep class org.kymjs.music.ui.widget.ScrollGridView { <init>(...); }
+
+# view res/layout/aty_welcome_first.xml #generated:8
+-keep class org.kymjs.music.ui.widget.ScrollLayout { <init>(...); }
+
+# view res/layout/frag_lyric.xml #generated:107
+-keep class org.kymjs.music.ui.widget.TabLayout { <init>(...); }
+

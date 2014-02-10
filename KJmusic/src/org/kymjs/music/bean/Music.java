@@ -2,9 +2,10 @@ package org.kymjs.music.bean;
 
 import java.io.Serializable;
 
-import org.kymjs.music.utils.StringUtils;
-
+import net.tsz.afinal.annotation.sqlite.Id;
 import net.tsz.afinal.annotation.sqlite.Table;
+
+import org.kymjs.music.utils.StringUtils;
 
 /**
  * 本地音乐文件bean类
@@ -12,7 +13,7 @@ import net.tsz.afinal.annotation.sqlite.Table;
 @Table(name = "music")
 public class Music implements Serializable {
     // 设置自定义主键
-    // @Id(column = "id")
+    @Id(column = "id")
     private int id;
     private String title;
     private String artist;
