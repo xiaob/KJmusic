@@ -6,6 +6,7 @@ import org.kymjs.music.adapter.AbsPlayListAdapter;
 import org.kymjs.music.adapter.CollectListAdapter;
 import org.kymjs.music.adapter.FMPagerAdapter;
 import org.kymjs.music.adapter.MyMusicAdapter;
+import org.kymjs.music.ui.FMActivity;
 import org.kymjs.music.ui.Main;
 import org.kymjs.music.ui.widget.JSViewPager;
 import org.kymjs.music.ui.widget.ResideMenu;
@@ -13,9 +14,11 @@ import org.kymjs.music.utils.ListData;
 import org.kymjs.music.utils.UIHelper;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -24,6 +27,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -285,6 +289,28 @@ public class MainFragment extends BaseFragment {
             case 2:
                 View fmView = View.inflate(getActivity(),
                         R.layout.pager_item_main_fm, null);
+                ImageView fmImg = (ImageView) fmView
+                        .findViewById(R.id.pager_img_fm);
+                fmImg.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // startActivity(new Intent(getActivity(),
+                        // FMActivity.class));
+                        Intent intent = new Intent();
+                        try {
+                            getActivity().getPackageManager().getPackageInfo(
+                                    "com.douban.radio", 0);
+                            intent.setComponent(new ComponentName(
+                                    "com.douban.radio",
+                                    "com.douban.radio.app.WelcomeActivity"));
+                        } catch (NameNotFoundException e) {
+                            intent.setClass(getActivity(), FMActivity.class);
+                            UIHelper.toast("您还未安装豆瓣FM");
+                            e.printStackTrace();
+                        }
+                        startActivity(intent);
+                    }
+                });
                 GridView grid = (GridView) fmView
                         .findViewById(R.id.pager_grid_fm);
                 grid.setAdapter(new FMPagerAdapter());

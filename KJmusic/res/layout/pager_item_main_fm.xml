@@ -35,13 +35,13 @@
             <ImageView
                 android:id="@+id/pager_img_fm"
                 android:layout_width="match_parent"
-                android:layout_height="110dp"
+                android:layout_height="130dp"
                 android:layout_margin="2dp"
                 android:padding="5dp"
                 android:scaleType="fitXY"
-                android:src="@drawable/splash_screen_logo" />
+                android:src="@drawable/ic_douban" />
 
-            <GridView
+            <org.kymjs.music.ui.widget.ScrollGridView
                 android:id="@+id/pager_grid_fm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
