@@ -223,13 +223,10 @@ public class LyricFragment extends BaseFragment {
                 RadioButton circle = (RadioButton) circles.getChildAt(view);
                 circle.setChecked(true);
                 if (view == 0) {
-                    mScrollLayout.setBackgroundColor(0x55000000);
                 } else if (view == 1) {
                     mCboxWordImg.setChecked(true);
-                    mScrollLayout.setBackgroundColor(0x00000000);
                 } else if (view == 2) {
                     mCboxWordImg.setChecked(false);
-                    mScrollLayout.setBackgroundColor(0x55000000);
                 }
             }
         });

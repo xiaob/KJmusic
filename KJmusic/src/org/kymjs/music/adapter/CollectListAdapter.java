@@ -7,11 +7,14 @@ import org.kymjs.music.R;
 import org.kymjs.music.bean.Music;
 import org.kymjs.music.utils.DensityUtils;
 import org.kymjs.music.utils.ListData;
+import org.kymjs.music.utils.UIHelper;
 
 import android.content.Context;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
 import android.widget.TextView;
 
 /**
@@ -24,6 +27,7 @@ public class CollectListAdapter extends AbsPlayListAdapter {
     private Context context;
     private int currentPager;
     private List<Music> datas = null;
+    private PopupWindow mPopup;
 
     public CollectListAdapter(Context context, int current) {
         super(current);
@@ -57,7 +61,7 @@ public class CollectListAdapter extends AbsPlayListAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         int px = DensityUtils.dip2px(context, 14);
         ViewHolder holder;
         if (convertView == null) {
@@ -78,6 +82,13 @@ public class CollectListAdapter extends AbsPlayListAdapter {
         holder.tv_title.setText(datas.get(position).getTitle());
         holder.tv_artist.setText(datas.get(position).getArtist());
         holder.img_menu.setImageResource(R.drawable.selector_adp_menu);
+        holder.img_menu.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopup = UIHelper.getUIHelper().getPopupWindow(context);
+                mPopup.showAsDropDown(v);
+            }
+        });
         return convertView;
     }
 

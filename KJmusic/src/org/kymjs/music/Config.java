@@ -3,6 +3,12 @@ package org.kymjs.music;
 public class Config {
     /** 当前版本 */
     public static final double VEWSION = 1.0;
+    
+    /**
+     * Operation collect list's popupWindow
+     */
+    public static final float Width = 252;
+    public static final float Height = 59.5F;
 
     /** Default display */
     public static final String TITLE = "KJ音乐";
