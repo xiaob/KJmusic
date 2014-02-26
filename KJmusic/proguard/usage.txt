@@ -1316,7 +1316,6 @@ net.tsz.afinal.FinalDb:
     224:236:public boolean saveBindId(java.lang.Object)
     245:253:private void insertContentValues(java.util.List,android.content.ContentValues)
     260:262:public void update(java.lang.Object)
-    279:281:public void delete(java.lang.Object)
     289:291:public void deleteById(java.lang.Class,java.lang.Object)
     343:358:public java.lang.Object findById(java.lang.Object,java.lang.Class)
     367:376:public java.lang.Object findWithManyToOneById(java.lang.Object,java.lang.Class)
@@ -1618,7 +1617,6 @@ net.tsz.afinal.db.sqlite.OneToManyLazyLoader:
     42:43:public void setList(java.util.List)
 net.tsz.afinal.db.sqlite.SqlBuilder:
     31:31:public SqlBuilder()
-    110:125:public static net.tsz.afinal.db.sqlite.SqlInfo buildDeleteSql(java.lang.Object)
     131:145:public static net.tsz.afinal.db.sqlite.SqlInfo buildDeleteSql(java.lang.Class,java.lang.Object)
     176:182:public static java.lang.String getSelectSQL(java.lang.Class,java.lang.Object)
     186:195:public static net.tsz.afinal.db.sqlite.SqlInfo getSelectSqlAsSqlInfo(java.lang.Class,java.lang.Object)
@@ -1717,6 +1715,8 @@ org.kymjs.music.AppStart:
 org.kymjs.music.BuildConfig
 org.kymjs.music.Config:
     public static final double VEWSION
+    public static final float Width
+    public static final float Height
     public static final java.lang.String TITLE
     public static final java.lang.String ARTIST
     public static final java.lang.String FIRSTINSTALL_FILE
@@ -1733,7 +1733,7 @@ org.kymjs.music.Config:
     public static final int PLAYING_PAUSE
     public static final int PLAYING_PLAY
     public static final java.lang.String RECEIVER_MUSIC_CHANGE
-    public static final java.lang.String RECEIVER_MUSIC_SCAN_SUCCESS
+    public static final java.lang.String RECEIVER_UPDATE_MUSIC_LIST
     public static final java.lang.String RECEIVER_MUSIC_SCAN_FAIL
     public static final java.lang.String LRC_TEXT
     public static final boolean isAuto
@@ -1768,6 +1768,10 @@ org.kymjs.music.ui.BaseActivity:
     private static final int ACTIVITY_PAUSE
     private static final int ACTIVITY_DESTROY
     37:38:public void setAllowFullScreen(boolean)
+org.kymjs.music.ui.LoginDialog:
+    public static final int LOGIN_OTHER
+    public static final int LOGIN_MAIN
+    public static final int LOGIN_SETTING
 org.kymjs.music.ui.fragment.LyricFragment:
     public static final int SNAP_VELOCITY
 org.kymjs.music.ui.widget.ILrcView:
@@ -1821,11 +1825,14 @@ org.kymjs.music.utils.StringUtils:
     41:54:public static java.lang.String timeFormat(int)
     64:66:public static java.util.Date toDate(java.lang.String)
     77:87:public static boolean isToday(java.lang.String)
-    97:106:public static boolean isEmpty(java.lang.String)
     116:118:public static boolean isEmail(java.lang.String)
     143:145:public static int toInt(java.lang.Object)
     156:159:public static long toLong(java.lang.String)
     170:173:public static boolean toBool(java.lang.String)
-org.kymjs.music.utils.UIHelper:
-    14:14:public UIHelper()
-    24:26:public static void toast(android.content.Context,java.lang.String)
+org.kymjs.music.utils.Tool:
+    20:20:public Tool()
+    37:37:public static final void shareToFriend(android.content.Context)
+    45:46:public static java.lang.String getDataTime()
+    56:59:public static boolean isCheckNet(android.content.Context)
+org.kymjs.music.utils.UIHelper$UIHelperHolder:
+    31:31:private UIHelper$UIHelperHolder()

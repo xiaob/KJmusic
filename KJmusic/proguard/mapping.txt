@@ -1341,6 +1341,7 @@ net.tsz.afinal.FinalDb -> b.a.a.g:
     net.tsz.afinal.FinalDb create$1e139ae(android.content.Context,java.lang.String) -> a
     void save(java.lang.Object) -> a
     void update(java.lang.Object,java.lang.String) -> a
+    void delete(java.lang.Object) -> b
     void deleteByWhere$589a5432(java.lang.Class) -> a
     void dropDb() -> a
     void exeSqlInfo(net.tsz.afinal.db.sqlite.SqlInfo) -> a
@@ -1695,7 +1696,8 @@ net.tsz.afinal.db.sqlite.OneToManyLazyLoader -> b.a.a.d.a.c:
     java.lang.Class listItemClazz -> c
     net.tsz.afinal.FinalDb db -> d
 net.tsz.afinal.db.sqlite.SqlBuilder -> b.a.a.d.a.d:
-    java.lang.String getSelectSqlByTableName(java.lang.String) -> a
+    java.lang.String getDeleteSqlBytableName(java.lang.String) -> a
+    java.lang.String getSelectSqlByTableName(java.lang.String) -> b
     net.tsz.afinal.db.table.KeyValue property2KeyValue(net.tsz.afinal.db.table.Property,java.lang.Object) -> a
     net.tsz.afinal.db.table.KeyValue manyToOne2KeyValue(net.tsz.afinal.db.table.ManyToOne,java.lang.Object) -> a
 net.tsz.afinal.db.sqlite.SqlInfo -> b.a.a.d.a.e:
@@ -1844,22 +1846,31 @@ org.kymjs.music.adapter.CollectListAdapter -> org.kymjs.music.a.b:
     android.content.Context context -> a
     int currentPager -> b
     java.util.List datas -> c
+    android.widget.PopupWindow mPopup -> d
     int getCount() -> getCount
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
     int getCurrentPager() -> a
     void refresh() -> b
-org.kymjs.music.adapter.CollectListAdapter$ViewHolder -> org.kymjs.music.a.c:
+    android.content.Context access$0(org.kymjs.music.adapter.CollectListAdapter) -> a
+    java.util.List access$1(org.kymjs.music.adapter.CollectListAdapter) -> b
+    void access$2(org.kymjs.music.adapter.CollectListAdapter,android.widget.PopupWindow) -> a
+    android.widget.PopupWindow access$3(org.kymjs.music.adapter.CollectListAdapter) -> c
+org.kymjs.music.adapter.CollectListAdapter$1 -> org.kymjs.music.a.c:
+    org.kymjs.music.adapter.CollectListAdapter this$0 -> a
+    int val$position -> b
+    void onClick(android.view.View) -> onClick
+org.kymjs.music.adapter.CollectListAdapter$ViewHolder -> org.kymjs.music.a.d:
     android.widget.TextView tv_title -> a
     android.widget.TextView tv_artist -> b
     android.widget.ImageView img_menu -> c
-org.kymjs.music.adapter.FMPagerAdapter -> org.kymjs.music.a.d:
+org.kymjs.music.adapter.FMPagerAdapter -> org.kymjs.music.a.e:
     int getCount() -> getCount
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-org.kymjs.music.adapter.LrcListAdapter -> org.kymjs.music.a.e:
+org.kymjs.music.adapter.LrcListAdapter -> org.kymjs.music.a.f:
     android.content.Context context -> a
     java.util.List datas -> b
     java.lang.String imgUrl -> c
@@ -1867,11 +1878,11 @@ org.kymjs.music.adapter.LrcListAdapter -> org.kymjs.music.a.e:
     java.lang.Object getItem(int) -> getItem
     long getItemId(int) -> getItemId
     android.view.View getView(int,android.view.View,android.view.ViewGroup) -> getView
-org.kymjs.music.adapter.LrcListAdapter$ViewHolder -> org.kymjs.music.a.f:
+org.kymjs.music.adapter.LrcListAdapter$ViewHolder -> org.kymjs.music.a.g:
     android.widget.TextView tv_title -> a
     android.widget.TextView tv_artist -> b
     android.widget.ImageView img -> c
-org.kymjs.music.adapter.MyMusicAdapter -> org.kymjs.music.a.g:
+org.kymjs.music.adapter.MyMusicAdapter -> org.kymjs.music.a.h:
     android.content.Context mContext -> a
     int currentPager -> b
     java.util.List datas -> c
@@ -1885,11 +1896,11 @@ org.kymjs.music.adapter.MyMusicAdapter -> org.kymjs.music.a.g:
     android.content.Context access$0(org.kymjs.music.adapter.MyMusicAdapter) -> a
     java.util.List access$1(org.kymjs.music.adapter.MyMusicAdapter) -> b
     boolean access$2(org.kymjs.music.adapter.MyMusicAdapter,int) -> a
-org.kymjs.music.adapter.MyMusicAdapter$1 -> org.kymjs.music.a.h:
+org.kymjs.music.adapter.MyMusicAdapter$1 -> org.kymjs.music.a.i:
     org.kymjs.music.adapter.MyMusicAdapter this$0 -> a
     int val$position -> b
     void onClick(android.view.View) -> onClick
-org.kymjs.music.adapter.MyMusicAdapter$ViewHolder -> org.kymjs.music.a.i:
+org.kymjs.music.adapter.MyMusicAdapter$ViewHolder -> org.kymjs.music.a.j:
     android.widget.TextView tv_title -> a
     android.widget.TextView tv_artist -> b
     android.widget.ImageView img_collect -> c
@@ -1997,6 +2008,19 @@ org.kymjs.music.ui.FirstInstallActivity -> org.kymjs.music.ui.FirstInstallActivi
 org.kymjs.music.ui.FirstInstallActivity$1 -> org.kymjs.music.ui.b:
     org.kymjs.music.ui.FirstInstallActivity this$0 -> a
     void onReceive(android.content.Context,android.content.Intent) -> onReceive
+org.kymjs.music.ui.LoginDialog -> org.kymjs.music.ui.LoginDialog:
+    android.widget.ViewSwitcher mViewSwitcher -> b
+    android.widget.ImageButton btn_close -> c
+    android.widget.Button btn_login -> d
+    android.widget.AutoCompleteTextView mAccount -> e
+    android.widget.EditText mPwd -> f
+    android.graphics.drawable.AnimationDrawable loadingAnimation -> g
+    android.view.View loginLoading -> h
+    android.view.inputmethod.InputMethodManager imm -> i
+    void onCreate(android.os.Bundle) -> onCreate
+    boolean onKeyDown(int,android.view.KeyEvent) -> onKeyDown
+    void initWidget() -> a
+    void widgetClick(android.view.View) -> widgetClick
 org.kymjs.music.ui.Main -> org.kymjs.music.ui.Main:
     org.kymjs.music.ui.widget.ResideMenu resideMenu -> h
     org.kymjs.music.ui.widget.ResideMenuItem itemDown -> i
@@ -2363,7 +2387,8 @@ org.kymjs.music.ui.widget.TabLayout -> org.kymjs.music.ui.widget.TabLayout:
 org.kymjs.music.ui.widget.TabLayout$OnViewChangeListener -> org.kymjs.music.ui.widget.j:
     void OnViewChange(int) -> a
 org.kymjs.music.utils.DensityUtils -> org.kymjs.music.c.a:
-    int sp2px(android.content.Context,float) -> a
+    int dip2px(android.content.Context,float) -> a
+    int sp2px(android.content.Context,float) -> b
 org.kymjs.music.utils.ErrHandleUtils -> org.kymjs.music.c.b:
     void sendErrInfo(android.content.Context,java.lang.String) -> a
 org.kymjs.music.utils.FileUtils -> org.kymjs.music.c.c:
@@ -2426,7 +2451,8 @@ org.kymjs.music.utils.StringUtils -> org.kymjs.music.c.k:
     java.lang.ThreadLocal dateFormater -> b
     java.lang.ThreadLocal dateFormater2 -> c
     java.lang.ThreadLocal dateFormater3 -> d
-    int toInt$505cff29(java.lang.String) -> a
+    boolean isEmpty(java.lang.String) -> a
+    int toInt$505cff29(java.lang.String) -> b
 org.kymjs.music.utils.StringUtils$1 -> org.kymjs.music.c.l:
     java.lang.Object initialValue() -> initialValue
 org.kymjs.music.utils.StringUtils$2 -> org.kymjs.music.c.m:
@@ -2435,4 +2461,18 @@ org.kymjs.music.utils.StringUtils$3 -> org.kymjs.music.c.n:
     java.lang.Object initialValue() -> initialValue
 org.kymjs.music.utils.UIHelper -> org.kymjs.music.c.o:
     android.widget.Toast toast -> a
+    android.widget.PopupWindow popupWindow -> b
+    org.kymjs.music.utils.UIHelper getUIHelper() -> a
     void toast(java.lang.String) -> a
+    void toast(android.content.Context,java.lang.String) -> a
+    android.widget.PopupWindow getPopupWindow(android.content.Context,org.kymjs.music.bean.Music) -> a
+org.kymjs.music.utils.UIHelper$1 -> org.kymjs.music.c.p:
+    org.kymjs.music.utils.UIHelper this$0 -> a
+    int val$maxW -> b
+    int val$maxH -> c
+    android.content.Context val$context -> d
+    org.kymjs.music.bean.Music val$which -> e
+    boolean onTouch(android.view.View,android.view.MotionEvent) -> onTouch
+org.kymjs.music.utils.UIHelper$UIHelperHolder -> org.kymjs.music.c.q:
+    org.kymjs.music.utils.UIHelper instance -> a
+    org.kymjs.music.utils.UIHelper access$0() -> a

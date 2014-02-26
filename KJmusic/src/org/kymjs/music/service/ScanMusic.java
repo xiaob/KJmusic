@@ -5,6 +5,7 @@ import net.tsz.afinal.FinalDb;
 import org.kymjs.music.AppLog;
 import org.kymjs.music.Config;
 import org.kymjs.music.bean.Music;
+import org.kymjs.music.utils.StringUtils;
 
 import android.app.IntentService;
 import android.content.ContentResolver;
@@ -48,18 +49,20 @@ public class ScanMusic extends IntentService {
                         .getColumnIndex(MediaStore.Audio.Media.DATA));
                 String size = cursor.getString(cursor
                         .getColumnIndex(MediaStore.Audio.Media.SIZE));
-                Music music = new Music();
-                music.setTitle(title);
-                music.setArtist(artist);
-                music.setPath(path);
-                music.setSize(size);
-                music.setCollect(0);
-                music.setDecode("");
-                music.setEncode("");
-                music.setLrcId("");
-                db.save(music);
-                count++;
-                AppLog.debug("找到音乐：" + music.getTitle());
+                if (StringUtils.toInt(size, 0) > 700 * 1024) {
+                    Music music = new Music();
+                    music.setTitle(title);
+                    music.setArtist(artist);
+                    music.setPath(path);
+                    music.setSize(size);
+                    music.setCollect(0);
+                    music.setDecode("");
+                    music.setEncode("");
+                    music.setLrcId("");
+                    db.save(music);
+                    count++;
+                    AppLog.debug("找到音乐：" + music.getTitle());
+                }
             }
             result = true;
             Config.changeMusicInfo = true;
