@@ -18,4 +18,7 @@
 	
 	<color name="main_title_orange">#f4a460</color>
 	
+	<color name="full_transparent">#00000000</color>
+    <color name="half_transparent">#aa000000</color>
+	
 </resources>

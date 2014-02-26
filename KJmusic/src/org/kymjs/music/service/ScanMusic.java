@@ -69,7 +69,7 @@ public class ScanMusic extends IntentService {
 
         // 发送扫描成功或失败的广播
         Intent musicScan = new Intent();
-        String action = result ? Config.RECEIVER_MUSIC_SCAN_SUCCESS
+        String action = result ? Config.RECEIVER_UPDATE_MUSIC_LIST
                 : Config.RECEIVER_MUSIC_SCAN_FAIL;
         musicScan.setAction(action);
         musicScan.putExtra(Config.SCAN_MUSIC_COUNT, count);

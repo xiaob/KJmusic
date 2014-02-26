@@ -337,7 +337,7 @@ public class LyricFragment extends BaseFragment {
             Config.changeCollectInfo = true;
             Config.changeMusicInfo = true;
             getActivity().sendBroadcast(
-                    new Intent(Config.RECEIVER_MUSIC_SCAN_SUCCESS));
+                    new Intent(Config.RECEIVER_UPDATE_MUSIC_LIST));
             break;
         case R.id.lrc_btn_back:
             ((Main) getActivity()).wantScroll((Main) getActivity());

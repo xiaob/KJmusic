@@ -40,7 +40,7 @@ public class Config {
     /** 音乐改变的广播 */
     public static final String RECEIVER_MUSIC_CHANGE = "net.kymjs.music.music_change";
     /** 歌曲扫描完成广播 */
-    public static final String RECEIVER_MUSIC_SCAN_SUCCESS = "net.kymjs.music.music_scan_success";
+    public static final String RECEIVER_UPDATE_MUSIC_LIST = "net.kymjs.music.music_scan_success";
     public static final String RECEIVER_MUSIC_SCAN_FAIL = "net.kymjs.music.music_scan_fail";
 
     /** 音乐列表信息被改变 */

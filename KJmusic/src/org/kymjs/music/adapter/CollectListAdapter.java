@@ -85,7 +85,8 @@ public class CollectListAdapter extends AbsPlayListAdapter {
         holder.img_menu.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                mPopup = UIHelper.getUIHelper().getPopupWindow(context);
+                mPopup = UIHelper.getUIHelper().getPopupWindow(context,
+                        datas.get(position));
                 mPopup.showAsDropDown(v);
             }
         });

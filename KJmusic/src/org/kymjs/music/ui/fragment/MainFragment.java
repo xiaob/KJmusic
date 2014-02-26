@@ -185,7 +185,7 @@ public class MainFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Config.RECEIVER_MUSIC_SCAN_SUCCESS);
+        filter.addAction(Config.RECEIVER_UPDATE_MUSIC_LIST);
         filter.addAction(Config.RECEIVER_MUSIC_SCAN_FAIL);
         getActivity().registerReceiver(receiver, filter);
         return super.onCreateView(inflater, container, savedInstanceState);
@@ -205,7 +205,7 @@ public class MainFragment extends BaseFragment {
     public class RefreshAdapterReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Config.RECEIVER_MUSIC_SCAN_SUCCESS.equalsIgnoreCase(intent
+            if (Config.RECEIVER_UPDATE_MUSIC_LIST.equalsIgnoreCase(intent
                     .getAction())) {
                 // 我不知道为什么，调用刷新方法却没有刷新控件，好像必须销毁ListView再重新创建才能有刷新作用
                 // if (collectAdp != null) {

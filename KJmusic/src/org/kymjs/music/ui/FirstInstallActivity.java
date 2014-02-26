@@ -65,7 +65,7 @@ public class FirstInstallActivity extends BaseActivity implements
     BroadcastReceiver scanReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (Config.RECEIVER_MUSIC_SCAN_SUCCESS.equals(intent.getAction())) {
+            if (Config.RECEIVER_UPDATE_MUSIC_LIST.equals(intent.getAction())) {
                 scanToast = "扫描到 "
                         + intent.getIntExtra(Config.SCAN_MUSIC_COUNT, 0)
                         + " 首歌曲";
@@ -79,7 +79,7 @@ public class FirstInstallActivity extends BaseActivity implements
     protected void onCreate(android.os.Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IntentFilter filter = new IntentFilter();
-        filter.addAction(Config.RECEIVER_MUSIC_SCAN_SUCCESS);
+        filter.addAction(Config.RECEIVER_UPDATE_MUSIC_LIST);
         filter.addAction(Config.RECEIVER_MUSIC_SCAN_FAIL);
         registerReceiver(scanReceiver, filter);
     };
