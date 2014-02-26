@@ -322,13 +322,16 @@ public class Main extends BaseActivity {
             if (isOpen) {
                 wantScroll();
             } else {
-                // AppManager.getAppManager().AppExit(this);
-                moveTaskToBack(false);
+                resideMenu.openMenu();
+                // moveTaskToBack(false);
             }
+            return true;
+        } else if (keyCode == KeyEvent.KEYCODE_MENU) {
+            resideMenu.openMenu();
+            return true;
         } else {
-            super.onKeyDown(keyCode, event);
+            return false;
         }
-        return true;
     }
 
     /************************************************************************************
