@@ -1,10 +1,14 @@
-KJ音乐播放器<br>
-==================<br>
-如对程序有任何疑问，欢迎加QQ群：257053751讨论，或致email：kymjs123@gmail.com告知<br>
-==================<br>
+﻿KJmusic
+=======
 # **KJ音乐 Android 客户端项目简析** #
 
-*注：本文假设你已经有Android开发环境*
+*注：KJ音乐项目拟采用最新的Android应用开发框架KJFrameForAndroid从新开发*
+
+# KJFrameForAndroid 安卓应用框架交流平台
+* QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)
+* 第三方开发分支：[https://github.com/kuangsunny/KJFrameForAndroid](https://github.com/kuangsunny/KJFrameForAndroid)
+* 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
+* 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
 
 启动Eclipse，点击菜单并导入Android客户端项目，请确保你当前的Android SDK是最新版。<br>
 如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
@@ -35,7 +39,7 @@ GPLV2协议说明：GPL协议的主要内容是只要在一个软件中使用(�
 > └ project.properties<br>
 
 下面是src目录的子目录（未来可能变更）：<br>
-    > src<br>
+	> src<br>
 	> ├ org.kymjs.music<br>
 	> ├ org.kymjs.music.ui<br>
 	> ├ org.kymjs.music.ui.fragment<br>
