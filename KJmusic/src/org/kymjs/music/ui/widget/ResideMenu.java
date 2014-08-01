@@ -3,6 +3,7 @@ package org.kymjs.music.ui.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.kymjs.music.AppLog;
 import org.kymjs.music.R;
 
 import android.animation.Animator;
@@ -194,6 +195,7 @@ public class ResideMenu extends FrameLayout implements
      * 打开菜单相关的方法
      */
     private void showOpenMenuRelative() {
+        AppLog.debug("========showOpenMenuRelative198=====");
         setViewPadding();
         scaleDown_activity.start();
         // remove self if has not remove
@@ -293,6 +295,7 @@ public class ResideMenu extends FrameLayout implements
      */
     private AnimatorSet buildScaleDownAnimation(View target,
             float targetScaleX, float targetScaleY) {
+        AppLog.debug("======buildScaleDownAnimation==298====");
         int pivotX = (int) (getScreenWidth() * 1.5);
         int pivotY = (int) (getScreenHeight() * 0.5);
 
@@ -319,6 +322,7 @@ public class ResideMenu extends FrameLayout implements
      */
     private AnimatorSet buildScaleUpAnimation(View target, float targetScaleX,
             float targetScaleY) {
+        AppLog.debug("=======buildScaleUpAnimation=============324");
         AnimatorSet scaleUp = new AnimatorSet();
         scaleUp.playTogether(
                 ObjectAnimator.ofFloat(target, "scaleX", targetScaleX),
@@ -464,5 +468,4 @@ public class ResideMenu extends FrameLayout implements
          */
         public void closeMenu();
     }
-
 }

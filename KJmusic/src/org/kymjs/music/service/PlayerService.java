@@ -9,6 +9,7 @@ import org.kymjs.music.utils.ListData;
 import org.kymjs.music.utils.Player;
 import org.kymjs.music.utils.UIHelper;
 
+import android.app.Notification;
 import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -46,10 +47,17 @@ public class PlayerService extends Service {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        startForeground(1, new Notification());
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mPlayer.destroy();
         unregisterReceiver(mReceiver);
+        stopForeground(true);
     }
 
     /**
