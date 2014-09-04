@@ -2,13 +2,7 @@
 =======
 # **KJ音乐 Android 客户端项目简析** #
 
-*注：KJ音乐项目拟采用最新的Android应用开发框架KJFrameForAndroid从新开发*
-
-# KJFrameForAndroid 安卓应用框架交流平台
-* QQ群：[257053751](http://shang.qq.com/wpa/qunwpa?idkey=00d92c040e81d87ccd21f8d0fffb10640baaa66da45254c3bd329b6ff7d46fef)(开发者群1)
-* 第三方开发分支：[https://github.com/kuangsunny/KJFrameForAndroid](https://github.com/kuangsunny/KJFrameForAndroid)
-* 项目地址：[https://github.com/kymjs/KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)
-* 项目备用地址（可能不是最新代码）：[http://git.oschina.net/kymjs/KJFrameForAndroid](http://git.oschina.net/kymjs/KJFrameForAndroid)
+*注：KJ音乐项目拟采用最新的Android应用开发框架[KJFrameForAndroid](https://github.com/kymjs/KJFrameForAndroid)重新开发*
 
 启动Eclipse，点击菜单并导入Android客户端项目，请确保你当前的Android SDK是最新版。<br>
 如果编译出错，请修改项目根目录下的 project.properties 文件。<br>
